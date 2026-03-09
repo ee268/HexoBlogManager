@@ -1,2 +1,40 @@
-# HexoBlogManager
-基于c++/QQuick编写hexo博客管理程序，仅支持导入用GithubPages托管的博客
+# Hexo博客管理
+基于C++/QML编写hexo博客管理程序，仅支持导入用GithubPages托管的博客
+
+---
+
+## 🔨 构建
+
+最低版本要求
+
+> Qt 6.5.3
+>
+> CMake 3.16
+>
+> C++17
+
+Qt Creator可以直接选中`CMakeLists.txt`导入，选择MinGW 64bit或MSVC 64bit都可
+
+Visual Studio需要CMake生成sln，方法自行搜索
+
+---
+
+## 🌲 特性
+
+- 🌟 **深色/浅色模式无缝切换**
+- 🪐 **主题颜色支持自定义选择**
+- 🌈 **响应式布局，自适应窗口尺寸变化**
+- 🎈 **原创无边框窗口，支持窗口拖拽、大小拉伸**
+- 🎁 **丝滑动效，体验更佳（支持手动关闭）**
+
+---
+
+## 🎉 预览
+
+to do...
+
+---
+
+## 📖 协议
+
+to do...
