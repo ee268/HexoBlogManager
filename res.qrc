@@ -1,0 +1,23 @@
+<RCC>
+    <qresource prefix="/">
+        <file>res/title_bar/close.svg</file>
+        <file>res/title_bar/dark.svg</file>
+        <file>res/title_bar/light.svg</file>
+        <file>res/title_bar/minimize.svg</file>
+        <file>res/title_bar/maximize.svg</file>
+        <file>res/title_bar/restore.svg</file>
+        <file>res/menu_bar/about.svg</file>
+        <file>res/menu_bar/blog.svg</file>
+        <file>res/menu_bar/home.svg</file>
+        <file>res/menu_bar/import.svg</file>
+        <file>res/menu_bar/setting.svg</file>
+        <file>res/menu_bar/upload.svg</file>
+        <file>res/font/dingliezhuhaifont-20240831GengXinBan)-2.ttf</file>
+        <file>res/cover/default.jpg</file>
+        <file>res/about/avatar.jpg</file>
+        <file>res/about/bilibili.svg</file>
+        <file>res/about/GitHub_Invertocat_White.svg</file>
+        <file>res/about/neko.png</file>
+        <file>res/about/neko_round.jpg</file>
+    </qresource>
+</RCC>

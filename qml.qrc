@@ -1,0 +1,24 @@
+<RCC>
+    <qresource prefix="/qml">
+        <file>Main.qml</file>
+        <file>controls/BMTitleButton.qml</file>
+        <file>controls/BMWindow.qml</file>
+        <file>controls/BMMenu.qml</file>
+        <file>controls/BMMenuButton.qml</file>
+        <file>controls/BMRectangle.qml</file>
+        <file>controls/BMWindowDragArea.qml</file>
+        <file>controls/BMText.qml</file>
+        <file>controls/BMCarousel.qml</file>
+        <file>page/BMAbout.qml</file>
+        <file>page/BMImport.qml</file>
+        <file>page/BMSetting.qml</file>
+        <file>page/BMUpload.qml</file>
+        <file>page/BMBlog.qml</file>
+        <file>page/BMHome.qml</file>
+        <file>controls/BMCard.qml</file>
+    </qresource>
+    <qresource prefix="/config">
+        <file>basic/Config.qml</file>
+        <file>basic/qmldir</file>
+    </qresource>
+</RCC>
