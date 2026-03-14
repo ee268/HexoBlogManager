@@ -13,9 +13,7 @@
 >
 > C++17
 
-Qt Creator可以直接选中`CMakeLists.txt`导入，选择MinGW 64bit或MSVC 64bit都可
-
-Visual Studio需要CMake生成sln，方法自行搜索
+Qt Creator可以直接选中`CMakeLists.txt`导入，选择MinGW 64即可
 
 ---
 
