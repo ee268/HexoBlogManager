@@ -3,7 +3,6 @@ import "qrc:/config/basic"
 
 BMRectangle {
     id: root
-    color: Config.isLightMode ? Config.light : Config.dark
 
     ListModel {
         id: cardModel

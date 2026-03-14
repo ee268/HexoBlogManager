@@ -5,7 +5,7 @@ project(BlogManager VERSION 0.1 LANGUAGES CXX)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(Qt6 REQUIRED COMPONENTS Core Quick Core5Compat QuickControls2)
+find_package(Qt6 REQUIRED COMPONENTS Core Quick Core5Compat QuickControls2 Charts)
 
 qt_standard_project_setup(REQUIRES 6.5)
 
@@ -29,11 +29,14 @@ qt_add_qml_module(appBlogManager
     SOURCES ${RES}
     QML_FILES
         Main.qml
+        SOURCES include/processUpload.h
+        SOURCES src/processUpload.cpp
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
 # If you are developing for iOS or macOS you should consider setting an
 # explicit, fixed bundle identifier manually though.
+
 set_target_properties(appBlogManager PROPERTIES
 #    MACOSX_BUNDLE_GUI_IDENTIFIER com.example.appBlogManager
     MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
@@ -42,11 +45,17 @@ set_target_properties(appBlogManager PROPERTIES
     WIN32_EXECUTABLE TRUE
 )
 
+# 链接yaml-cpp
+target_include_directories(appBlogManager PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+target_link_directories(appBlogManager PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/lib)
+
 target_link_libraries(appBlogManager PRIVATE
     Qt6::Quick
     # QWindowKit::Quick
     Qt6::Core5Compat
     Qt6::QuickControls2
+    Qt6::Charts
+    yaml-cpp
 )
 target_link_libraries(appBlogManager PRIVATE Qt6::Core)
 

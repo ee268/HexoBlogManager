@@ -20,15 +20,22 @@ BMRectangle {
     visible: false
     opacity: 0
 
-
-    Behavior on color {
-        ColorAnimation {
-            duration: Config.aniDuration
-        }
-    }
-
     property real imgHeight: 400
     property real imgWidth : 150
+
+    Image {
+        id: bgImg
+        anchors.fill: parent
+        source: "qrc:/res/cover/default.jpg"
+        fillMode: Image.PreserveAspectCrop
+        visible: false
+    }
+
+    FastBlur {
+        anchors.fill: parent
+        source: bgImg
+        radius: 48
+    }
 
     ListModel {
         id: model
@@ -58,8 +65,8 @@ BMRectangle {
     }
 
     Item {
-        width: parent.width * 0.95
-        height: parent.height * 0.95
+        width: parent.width - 10
+        height: parent.height - 10
         anchors.centerIn: parent
         clip: true
 

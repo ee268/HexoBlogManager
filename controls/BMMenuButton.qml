@@ -39,6 +39,7 @@ Column {
                 width: 12
                 height: 12
                 fillMode: Image.PreserveAspectFit
+                visible: false
             }
 
             ColorOverlay {

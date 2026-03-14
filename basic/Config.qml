@@ -11,6 +11,9 @@ QtObject {
    property string font: "qrc:/res/font/dingliezhuhaifont-20240831GengXinBan)-2.ttf"
    property int curMenu: 0
    property bool isTopMenu: true
+   property bool showMsgBox: false
+   property string msgBoxType: "Success"
+   property string msgBoxContent: "content"
 
    readonly property color light: "#fdfbfb"
    readonly property color dark: "#2b2b2b"

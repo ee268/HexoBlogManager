@@ -5,18 +5,11 @@ import "qrc:/config/basic"
 BMRectangle {
     id: root
     width: 60
-    color: Config.isLightMode ? Config.light : Config.dark
     visible: false
     opacity: 0
 
     Behavior on opacity {
         NumberAnimation {
-            duration: Config.aniDuration
-        }
-    }
-
-    Behavior on color {
-        ColorAnimation {
             duration: Config.aniDuration
         }
     }

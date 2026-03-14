@@ -1,20 +1,28 @@
-#include <QGuiApplication>
 #include <QQmlApplicationEngine>
+#include <QApplication>
 #include <QQuickStyle>
 #include <QQmlContext>
 #include "include/carouselloader.h"
+#include "include/processUpload.h"
+
+void initContextProperty(QQmlApplicationEngine& engine) {
+    CarouselLoader* carouselLouader = new CarouselLoader(&engine);
+    engine.rootContext()->setContextProperty("carouselLoader", carouselLouader);
+
+    ProcessUpload* processUpload = new ProcessUpload(&engine);
+    engine.rootContext()->setContextProperty("processUpload", processUpload);
+}
 
 int main(int argc, char *argv[])
 {
-    QGuiApplication app(argc, argv);
+    QApplication app(argc, argv);
 
     //支持自定义控件样式
     QQuickStyle::setStyle("Basic");
 
     QQmlApplicationEngine engine;
 
-    CarouselLoader* carouselLouader = new CarouselLoader(&engine);
-    engine.rootContext()->setContextProperty("carouselLoader", carouselLouader);
+    initContextProperty(engine);
 
     QObject::connect(
         &engine,

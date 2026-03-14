@@ -18,6 +18,10 @@ BMWindow {
         console.log("desktop screen size: ", Screen.desktopAvailableWidth, Screen.desktopAvailableHeight)
     }
 
+    BMMessageBox {
+        id: msgBox
+    }
+
     //内容区
     Item {
         id: rootContainer
