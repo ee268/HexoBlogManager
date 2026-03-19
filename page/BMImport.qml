@@ -7,6 +7,30 @@ import Qt5Compat.GraphicalEffects
 
 Item {
     anchors.fill: parent
+    opacity: 0
+    visible: false
+
+    Behavior on opacity {
+        NumberAnimation {
+            duration: Config.aniDuration
+        }
+    }
+
+    function loadDicPath(dicPath) {
+        let isSuccess = processImport.setFolderPath(dicPath)
+        if (!isSuccess) {
+            console.log("SetFolderPath failed,", dicPath)
+            Config.setMsgBox(true, "Error", "导入失败")
+            return
+        }
+
+        let loadPath = processImport.getFolderPath() + "\n"
+        loadPath += processImport.getConfigYml() + "\n"
+        loadPath += processImport.getThemeConfigYml() + "\n"
+        loadPath += processImport.getPostPath() + "\n"
+        console.log("loadPath:", loadPath)
+        Config.setMsgBox(true, "Success", "导入成功")
+    }
 
     FolderDialog {
         id: folderDlg
@@ -14,7 +38,7 @@ Item {
         rejectLabel: qsTr("取消")
 
         onAccepted: {
-            console.log(currentFolder.toString().slice(8))
+            loadDicPath(currentFolder.toString().slice(8))
         }
     }
 
@@ -148,20 +172,12 @@ Item {
                 if(drop.hasUrls){
                     if (drop.urls.length > 1) {
                         console.log("too many directory path, only need single directory")
+                        Config.setMsgBox(true, "Error", "不允许导入多个文件夹")
                         return
                     }
 
                     let dicPath = drop.urls[0].toString().slice(8)
-                    let isSuccess = processUpload.setFolderPath(dicPath)
-                    if (!isSuccess) {
-                        console.log("SetFolderPath failed,", dicPath)
-                    }
-
-                    let loadPath = processUpload.getFolderPath() + "\n"
-                    loadPath += processUpload.getConfigYml() + "\n"
-                    loadPath += processUpload.getThemeConfigYml() + "\n"
-                    console.log("loadPath:", loadPath)
-                    Config.showMsgBox = true
+                    loadDicPath(dicPath)
                 }
             }
         }
@@ -209,105 +225,119 @@ Item {
 
             // clip: true
 
+            ListModel {
+                id: history
+                Component.onCompleted: {
+                    let json = processImport.readHistory();
+                    for (let i = 0; i < json.length; i++) {
+                        history.append(json[i])
+                    }
+                }
+            }
+
             ListView {
                 id: listView
                 anchors.fill: parent
                 spacing: 7
-                model: 10
+                model: history
                 clip: true
-                property bool hovered: false
 
                 ScrollBar.vertical: ScrollBar {
                     anchors.right: parent.right
                     width: 7
                     contentItem: Rectangle {
-                        visible: listView.hovered
                         implicitWidth: 10
                         radius: 4
                         color: Config.isLightMode ? Config.dark : Config.light
                     }
                 }
 
-                delegate: Rectangle {
-                    id: rec
-                    radius: 6
-                    width: innerItem.width
-                    height: 100
-                    color: Config.isLightMode ? "#dbdbdb" : "#404040"
+                delegate: historyDelegate
+            }
+        }
+    }
 
-                    Row {
-                        spacing: 30
-                        anchors {
-                            left: parent.left
-                            leftMargin: 7
-                            verticalCenter: parent.verticalCenter
+    Component {
+        id: historyDelegate
+        Rectangle {
+            id: rec
+            border.width: 1
+            border.color: "#e0dbdbdb"
+            radius: 6
+            width: innerItem.width
+            height: 100
+            color: Config.isLightMode ? Config.light : Config.dark
+
+            Row {
+                spacing: 30
+                anchors {
+                    left: parent.left
+                    leftMargin: 7
+                    verticalCenter: parent.verticalCenter
+                }
+
+                Rectangle {
+                    id: imgRec
+                    width: 180
+                    height: rec.height - 14
+                    radius: rec.radius
+                    layer.enabled: true
+                    layer.effect: OpacityMask {
+                        source: imgRec
+                        maskSource: Rectangle {
+                            width: imgRec.width
+                            height: imgRec.height
+                            radius: imgRec.radius
                         }
+                    }
 
-                        Rectangle {
-                            id: imgRec
-                            width: 180
-                            height: rec.height - 14
-                            radius: rec.radius
-                            layer.enabled: true
-                            layer.effect: OpacityMask {
-                                source: imgRec
-                                maskSource: Rectangle {
-                                    width: imgRec.width
-                                    height: imgRec.height
-                                    radius: imgRec.radius
-                                }
-                            }
+                    Image {
+                        source: "qrc:/res/cover/default.jpg"
+                        width: parent.width
+                        height: parent.height
+                        fillMode: Image.PreserveAspectCrop
+                    }
+                }
 
-                            Image {
-                                source: "qrc:/res/cover/default.jpg"
-                                width: parent.width
-                                height: parent.height
-                                fillMode: Image.PreserveAspectCrop
-                            }
-                        }
+                Column {
+                    spacing: 10
+                    anchors.verticalCenter: parent.verticalCenter
 
-                        Column {
-                            spacing: 10
-                            anchors.verticalCenter: parent.verticalCenter
-
-                            BMText {
-                                text: "folderName"
-                                font.pixelSize: 18
-                            }
-
-                            BMText {
-                                text: "folderPath"
-                                font.pixelSize: 16
-                                opacity: 0.5
-                            }
-                        }
+                    BMText {
+                        text: name
+                        font.pixelSize: 18
                     }
 
                     BMText {
-                        anchors {
-                            verticalCenter: parent.verticalCenter
-                            right: parent.right
-                            rightMargin: 7
-                        }
-
-                        text: "importDate"
-                        font.pixelSize: 18
-                    }
-                }
-
-                MouseArea {
-                    anchors.fill: parent
-                    hoverEnabled: true
-
-                    onEntered: {
-                        listView.hovered = true
-                    }
-
-                    onExited: {
-                        listView.hovered = false
+                        text: path
+                        font.pixelSize: 16
+                        opacity: 0.5
                     }
                 }
             }
+
+            BMText {
+                anchors {
+                    verticalCenter: parent.verticalCenter
+                    right: parent.right
+                    rightMargin: 7
+                }
+
+                text: date
+                font.pixelSize: 18
+            }
+
+            MouseArea {
+                anchors.fill: parent
+                onClicked: {
+                    loadDicPath(path)
+                }
+            }
         }
+    }
+
+    Component.onCompleted: {
+        visible = true
+        opacity = 1
     }
 }

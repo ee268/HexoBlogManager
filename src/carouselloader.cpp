@@ -67,7 +67,7 @@ QColor CarouselLoader::GetMainColor(QString path)
 
 QJsonArray CarouselLoader::GetImgList()
 {
-    return imgList;
+    return _imgList;
 }
 
 void CarouselLoader::initList()
@@ -110,5 +110,5 @@ void CarouselLoader::initList()
     jsonObj["externalUrl"] = "https://ee268.github.io/";
     array.append(jsonObj);
 
-    this->imgList = array;
+    this->_imgList = array;
 }

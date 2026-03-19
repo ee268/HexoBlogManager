@@ -5,13 +5,11 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
-#include <QHash>
 #include <QDebug>
 #include <QColor>
 #include <QPixmap>
 #include <QRgb>
 #include <QString>
-#include <thread>
 
 class CarouselLoader: public QObject
 {
@@ -28,8 +26,7 @@ public:
 private:
     void initList();
 
-    QJsonArray imgList;
-    std::thread initThread;
+    QJsonArray _imgList;
 };
 
 #endif // CAROUSELLOADER_H

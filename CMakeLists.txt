@@ -29,6 +29,14 @@ qt_add_qml_module(appBlogManager
     SOURCES ${RES}
     QML_FILES
         Main.qml
+        SOURCES include/processImport.h
+        SOURCES src/processImport.cpp
+        SOURCES include/blogMgr.h
+        SOURCES src/blogMgr.cpp
+        SOURCES include/frontMatterMgr.h
+        SOURCES src/frontMatterMgr.cpp
+        SOURCES include/global.h
+        SOURCES src/global.cpp
         SOURCES include/processUpload.h
         SOURCES src/processUpload.cpp
 )

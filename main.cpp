@@ -1,17 +1,7 @@
 #include <QQmlApplicationEngine>
 #include <QApplication>
 #include <QQuickStyle>
-#include <QQmlContext>
-#include "include/carouselloader.h"
-#include "include/processUpload.h"
-
-void initContextProperty(QQmlApplicationEngine& engine) {
-    CarouselLoader* carouselLouader = new CarouselLoader(&engine);
-    engine.rootContext()->setContextProperty("carouselLoader", carouselLouader);
-
-    ProcessUpload* processUpload = new ProcessUpload(&engine);
-    engine.rootContext()->setContextProperty("processUpload", processUpload);
-}
+#include "include/global.h"
 
 int main(int argc, char *argv[])
 {
@@ -22,7 +12,8 @@ int main(int argc, char *argv[])
 
     QQmlApplicationEngine engine;
 
-    initContextProperty(engine);
+    //初始化
+    GlobalMgr gMgr(engine, &app);
 
     QObject::connect(
         &engine,

@@ -1,100 +1,146 @@
 #include "include/processUpload.h"
-#include <QFile>
-#include <QDir>
-#include <yaml-cpp/yaml.h>
+#include <QDebug>
 #include <QRegularExpression>
+#include <QDesktopServices>
+#include <QUrl>
 
-ProcessUpload::ProcessUpload(QObject* obj/* = nullptr*/)
-    : QObject(obj)
+ProcessUpload::ProcessUpload(QObject *parent/* = nullptr*/)
+    : QObject(parent)
+    , _workPath("")
+    , _process(new QProcess(this))
+    , _killProcess(new QProcess(this))
 {
 
 }
 
-bool ProcessUpload::setFolderPath(QString path)
+ProcessUpload::~ProcessUpload()
 {
-    QDir dir(path);
-    QFileInfo fInfo(path);
-    if (!dir.exists() || !fInfo.isDir()) {
-        qDebug() << "this path not a directory" << path;
-        return false;
+    if (_process) {
+        forceKillProcess();
+        _process->deleteLater();
+        _killProcess->deleteLater();
+    }
+}
+
+void ProcessUpload::startCommand(QString program, QStringList args) {
+    if (_workPath.isEmpty()) {
+        emit sigFinishedCommand(false);
+        return;
     }
 
-    QFileInfoList fileList = dir.entryInfoList(QDir::Dirs | QDir::Files | QDir::NoDotAndDotDot);
-
-    int initFlag = 0;
-
-    for (auto& file : fileList) {
-        // qDebug() << file.filePath();
-        if (initFlag == 2) break;
-
-        auto fName = file.fileName();
-        if (fName.mid(0, 7) == "_config") {
-            if (fName == "_config.yml") {
-                bool isYml = isYmlFile(file.filePath());
-                if (!isYml) {
-                    qDebug() << "not yml file: " << file.filePath();
-                    return false;
-                }
-
-                configYml = file.filePath();
-                initFlag++;
-                continue;
-            }
-            if (isThemeConfigYml(fName)) {
-                bool isYml = isYmlFile(file.filePath());
-                if (!isYml) {
-                    qDebug() << "not yml file: " << file.filePath();
-                    return false;
-                }
-
-                themeConfigYml = file.filePath();
-                initFlag++;
-                continue;
-            }
-        }
+    if (program == "hexo" && args[0] == "s") {
+        emit sigStartServer();
+        QDesktopServices::openUrl(QUrl("http://localhost:4000"));
     }
 
-    folderPath = path;
+    _process->setWorkingDirectory(_workPath);
 
-    return true;
+    initConnect();
+
+#ifdef Q_OS_WIN
+    _process->start("cmd", QStringList() << "/c" << program << args);
+#else
+    _process->start(program, args);
+#endif
 }
 
-bool ProcessUpload::isYmlFile(const QString &path)
+void ProcessUpload::addCommand(QString program, QStringList args)
 {
-    try {
-        YAML::Node node = YAML::LoadFile(path.toStdString());
-        return true;
-    }
-    catch (std::exception& e) {
-        qDebug() << "isYmlFile false: " << e.what();
-        return false;
-    }
+    Command c(program, args);
+    _commands.enqueue(c);
 
-    return false;
-}
-
-bool ProcessUpload::isThemeConfigYml(const QString &name)
-{
-    QRegularExpression re("^_[^.\s]+\.[^.\s]+\.(yml|yaml)$");
-    QRegularExpressionMatch match = re.match(name);
-    if (match.hasMatch()) {
-        return true;
+    if (_process->state() != QProcess::NotRunning) {
+        return;
     }
 
-    return true;
+    if (_commands.size() == 1) {
+        startCommand(c._program, c._args);
+        return;
+    }
+
+    qDebug() << "not excute command";
 }
 
-QString ProcessUpload::getFolderPath() const
+void ProcessUpload::stopHexoS()
 {
-    return folderPath;
+    if (_process && _process->state() == QProcess::Running) {
+        forceKillProcess();
+        qDebug() << "Hexo Server has stopped";
+    }
 }
 
-QString ProcessUpload::getConfigYml() const
+void ProcessUpload::SlotImportFinished(QString path)
 {
-    return configYml;
+    _workPath = path;
 }
 
-QString ProcessUpload::getThemeConfigYml() const
+void ProcessUpload::SlotSendStandardOutput()
 {
-    return themeConfigYml;
+    QByteArray data = _process->readAllStandardOutput();
+    QString output = data;
+    // qDebug().noquote() << "StandardOutput: " << output;
+    emit sigSendOutput(cleanAnsiCharacters(output));
+}
+
+void ProcessUpload::SlotSendStandardError()
+{
+    QByteArray data = _process->readAllStandardError();
+    QString output = data;
+    // qDebug().noquote() << "StandardError: " << output;
+    emit sigSendOutput(cleanAnsiCharacters(output));
+}
+
+void ProcessUpload::SlotProcessFinished(int exitCode, QProcess::ExitStatus exitStatus)
+{
+    if (!_commands.isEmpty()) {
+        Command c = _commands.dequeue();
+    }
+    if (!_commands.isEmpty()) {
+        Command c = _commands.dequeue();
+        startCommand(c._program, c._args);
+    }
+
+    emit sigFinishedCommand(false);
+}
+
+QString ProcessUpload::cleanAnsiCharacters(const QString& data) {
+    // 匹配 ANSI 转义序列的正则表达式
+    static QRegularExpression ansiRegex("[\u001b\u009b][[\\]()#;?]*"
+                                        "(?:(?:(?:[a-zA-Z\\d]*(?:;[-a-zA-Z\\d\\/#&.:=?%@~_]*)*)?\u0007)"
+                                        "|(?:(?:\\d{1,4}(?:;\\d{0,4})*)?[\\dA-PR-TZcf-ntqry=><~]))");
+
+    QString cleanStr = data;
+    return cleanStr.remove(ansiRegex);
+}
+
+void ProcessUpload::initConnect()
+{
+    connect(_process, &QProcess::readyReadStandardOutput, this, &ProcessUpload::SlotSendStandardOutput);
+    connect(_process, &QProcess::readyReadStandardError, this, &ProcessUpload::SlotSendStandardError);
+
+    connect(_process, &QProcess::errorOccurred, this, [this](QProcess::ProcessError error) {
+        qDebug() << "QProcess start failed, error is " << error;
+        emit sigFinishedCommand(false);
+    });
+
+    connect(_process, &QProcess::finished, this, &ProcessUpload::SlotProcessFinished);
+    connect(_process, &QProcess::finished, this, [this](){
+        emit sigStopServer();
+    });
+}
+
+void ProcessUpload::forceKillProcess() {
+    if (!_process || _process->state() == QProcess::NotRunning) return;
+
+    qint64 pid = _process->processId();
+
+#ifdef Q_OS_WIN
+    QStringList killArgs;
+    killArgs << "/F" << "/T" << "/PID" << QString::number(pid);
+
+    //阻塞
+    _killProcess->start("taskkill", killArgs);
+#else
+    _process->kill();
+#endif
 }

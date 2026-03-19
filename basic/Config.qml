@@ -12,8 +12,17 @@ QtObject {
    property int curMenu: 0
    property bool isTopMenu: true
    property bool showMsgBox: false
-   property string msgBoxType: "Success"
+   property string msgBoxType: "Info"
    property string msgBoxContent: "content"
+   property bool isLoading: false
+   property string loadingText: "加载中"
+   property bool loadingCancelBtn: false
+
+   function setMsgBox(isShow, type, content) {
+      showMsgBox = isShow
+      msgBoxType = type
+      msgBoxContent = content
+   }
 
    readonly property color light: "#fdfbfb"
    readonly property color dark: "#2b2b2b"

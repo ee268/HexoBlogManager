@@ -17,6 +17,7 @@
         <file>page/BMHome.qml</file>
         <file>controls/BMCard.qml</file>
         <file>controls/BMMessageBox.qml</file>
+        <file>controls/BMLoading.qml</file>
     </qresource>
     <qresource prefix="/config">
         <file>basic/Config.qml</file>

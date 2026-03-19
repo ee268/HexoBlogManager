@@ -1,29 +1,59 @@
 #ifndef PROCESSUPLOAD_H
 #define PROCESSUPLOAD_H
 #include <QObject>
-#include <QString>
-#include <QDebug>
+#include <QProcess>
+#include <QQueue>
+
+struct Command {
+    Command(QString pgm, QStringList args)
+        : _program(pgm)
+        , _args(args)
+    {}
+
+    Command& operator=(const Command& cmd) {
+        _program = cmd._program;
+        _args = cmd._args;
+        return *this;
+    }
+
+    QString _program;
+    QStringList _args;
+};
 
 class ProcessUpload: public QObject {
     Q_OBJECT
 public:
-    explicit ProcessUpload(QObject* obj = nullptr);
-    ~ProcessUpload() = default;
+    explicit ProcessUpload(QObject* parent = nullptr);
+    ~ProcessUpload();
 
-    Q_INVOKABLE bool setFolderPath(QString path);
+    void startCommand(QString program, QStringList args);
 
-    bool isYmlFile(const QString& path);
+    Q_INVOKABLE void addCommand(QString program, QStringList args);
 
-    bool isThemeConfigYml(const QString& name);
-
-    Q_INVOKABLE QString getFolderPath() const;
-    Q_INVOKABLE QString getConfigYml() const;
-    Q_INVOKABLE QString getThemeConfigYml() const;
+    Q_INVOKABLE void stopHexoS();
 
 private:
-    QString folderPath;
-    QString configYml;
-    QString themeConfigYml;
+    QString cleanAnsiCharacters(const QString& data);
+    void initConnect();
+    void forceKillProcess();
+
+    QString _workPath;
+    QProcess* _process;
+    QProcess* _killProcess;
+    QQueue<Command> _commands;
+
+signals:
+    void sigFinishedCommand(bool);
+    void sigSendOutput(QString);
+    void sigStartServer();
+    void sigStopServer();
+
+public slots:
+    void SlotImportFinished(QString path);
+    void SlotSendStandardOutput();
+    void SlotSendStandardError();
+    void SlotProcessFinished(int exitCode, QProcess::ExitStatus exitStatus);
 };
+
 
 #endif // PROCESSUPLOAD_H

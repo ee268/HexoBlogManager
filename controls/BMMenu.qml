@@ -44,7 +44,7 @@ BMRectangle {
             }
 
             ListElement {
-                name: "上传"
+                name: "部署"
                 pageId: "upload"
                 img: "qrc:/res/menu_bar/upload.svg"
             }

@@ -7,7 +7,7 @@ import Qt5Compat.GraphicalEffects
 
 BMWindow {
     id: window
-    minimumWidth: 900
+    minimumWidth: 1000
     minimumHeight: 700
     maximumWidth: Screen.desktopAvailableWidth
     maximumHeight: Screen.desktopAvailableHeight
@@ -20,6 +20,17 @@ BMWindow {
 
     BMMessageBox {
         id: msgBox
+    }
+
+    BMLoading {
+        anchors {
+            top: parent.top
+            topMargin: Config.titleBarHeight
+            left: parent.left
+            right: parent.right
+            bottom: parent.bottom
+        }
+        z: 999
     }
 
     //内容区

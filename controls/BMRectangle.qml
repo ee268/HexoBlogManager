@@ -1,7 +1,6 @@
 import QtQuick
 import "qrc:/config/basic"
 import QtQuick.Effects
-import Qt5Compat.GraphicalEffects
 
 Item {
     property alias radius: rec.radius
@@ -26,7 +25,7 @@ Item {
         source: rec
         anchors.fill: rec
         shadowEnabled: true
-        shadowBlur: 0.4
+        shadowBlur: 0.3
         shadowColor: Config.isLightMode ? Config.dark : Config.light
         autoPaddingEnabled: true
         visible: shadowVisible

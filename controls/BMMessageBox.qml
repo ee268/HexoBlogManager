@@ -155,6 +155,7 @@ Rectangle {
                 to: 0
                 duration: 5000
                 onFinished: {
+                    if (Config.showMsgBox === false) return
                     Config.showMsgBox = false
                 }
             }
@@ -175,9 +176,8 @@ Rectangle {
 
     onVisibleChanged: {
         if (visible === true) {
-            pgsAni.start()
-            return
+            progress.width = boxRec.width - 20
+            pgsAni.restart()
         }
-        progress.width = boxRec.width - 20
     }
 }
