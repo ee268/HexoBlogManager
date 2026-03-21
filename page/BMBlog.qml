@@ -171,6 +171,7 @@ BMRectangle {
                     }
 
                     Item {
+                        id: editBtn
                         width: 20
                         height: 20
                         Image {
@@ -189,6 +190,7 @@ BMRectangle {
                     }
 
                     Item {
+                        id: uploadBtn
                         width: 20
                         height: 20
                         Image {
@@ -216,6 +218,37 @@ BMRectangle {
                 }
                 onExited: {
                     borderRec.scale = 1
+                }
+
+                onClicked: {
+                    let point = mapToItem(uploadBtn, mouseX, mouseY)
+                    let point2 = mapToItem(editBtn, mouseX, mouseY)
+                    if (uploadBtn.contains(Qt.point(point.x, point.y))) {
+                        console.log("clicked uploadBtn")
+                        Config.changeMenu(1, 3)
+                        return
+                    }
+                    else if (editBtn.contains(Qt.point(point2.x, point2.y))) {
+                        console.log("clicked editBtn")
+
+                        Config.openPostIdx = index
+                        const component = Qt.createComponent("qrc:/qml/controls/BMMdEdit.qml");
+                        const incubator = component.incubateObject(null, { title: name });
+
+                        if (incubator.status !== Component.Ready) {
+                            incubator.onStatusChanged = function(status) {
+                                if (status === Component.Ready) {
+                                    incubator.object.show();
+                                } else if (status === Component.Error) {
+                                    console.log("open BMMdEdit failed:", component.errorString());
+                                }
+                            };
+                        } else {
+                            incubator.object.show();
+                        }
+
+                        return
+                    }
                 }
             }
         }

@@ -10,6 +10,7 @@ Window {
     color: "transparent"
     visible: true
     flags: Qt.FramelessWindowHint | Qt.Window
+    property bool isChild: false
 
     Rectangle {
         id: windowBg
@@ -17,6 +18,8 @@ Window {
         color: Config.isLightMode ? Config.light : Config.dark
         radius: 8
         clip: true
+        border.width: 1
+        border.color: "#f03d444d"
         layer.enabled: true
         layer.effect: OpacityMask {
             source: windowBg
@@ -70,6 +73,7 @@ Window {
                     source: Config.isLightMode ? "qrc:/res/title_bar/light.svg" : "qrc:/res/title_bar/dark.svg"
                     imgHeight: minButton.imgHeight + 5
                     imgWidth: minButton.imgWidth + 5
+                    visible: !isChild
                     onClicked: {
                         Config.isLightMode = !Config.isLightMode
 

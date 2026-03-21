@@ -12,25 +12,9 @@ BMWindow {
     maximumWidth: Screen.desktopAvailableWidth
     maximumHeight: Screen.desktopAvailableHeight
     title: qsTr("Blog Manager")
-    property bool initFlag: false
     Component.onCompleted: {
         console.log("screen size: ", Screen.width, Screen.height)
         console.log("desktop screen size: ", Screen.desktopAvailableWidth, Screen.desktopAvailableHeight)
-    }
-
-    BMMessageBox {
-        id: msgBox
-    }
-
-    BMLoading {
-        anchors {
-            top: parent.top
-            topMargin: Config.titleBarHeight
-            left: parent.left
-            right: parent.right
-            bottom: parent.bottom
-        }
-        z: 999
     }
 
     //内容区
@@ -102,49 +86,4 @@ BMWindow {
             BMSetting {}
         }
     }
-
-    // Item {
-    //     id: cursorFlw
-    //     width: 200
-    //     height: 200
-
-    //     Rectangle {
-    //         id: sourceRect
-    //         anchors.fill: parent
-    //         visible: false
-    //     }
-
-    //     RadialGradient {
-    //         anchors.fill: parent
-    //         source: sourceRect
-    //         horizontalOffset: 0
-    //         verticalOffset: 0
-    //         horizontalRadius: Math.max(width, height) / 2
-    //         verticalRadius: Math.max(width, height) / 2
-
-    //         gradient: Gradient {
-    //             GradientStop { position: 0.0; color: Qt.rgba(255, 255, 255, 15) }
-    //             GradientStop { position: 0.8; color: Qt.rgba(255, 255, 255, 0) }
-    //             GradientStop { position: 1.0; color: Qt.rgba(255, 255, 255, 0) }
-    //         }
-    //     }
-    // }
-
-    // MouseArea {
-    //     anchors {
-    //         topMargin: 32
-    //         top: parent.top
-    //         left: parent.left
-    //         right: parent.right
-    //         bottom: parent.bottom
-    //     }
-
-    //     hoverEnabled: true
-    //     onPositionChanged: (mouse) => {
-    //         cursorFlw.x = mouse.x - (cursorFlw.width / 2)
-    //         cursorFlw.y = mouse.y - (cursorFlw.height / 2) + 23
-
-    //         console.log("Mouse Center Adjusted:", cursorFlw.x, cursorFlw.y)
-    //     }
-    // }
 }

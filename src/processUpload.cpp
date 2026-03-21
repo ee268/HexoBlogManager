@@ -100,7 +100,7 @@ void ProcessUpload::SlotProcessFinished(int exitCode, QProcess::ExitStatus exitS
         startCommand(c._program, c._args);
     }
 
-    emit sigFinishedCommand(false);
+    emit sigFinishedCommand(true);
 }
 
 QString ProcessUpload::cleanAnsiCharacters(const QString& data) {

@@ -18,6 +18,11 @@
         <file>controls/BMCard.qml</file>
         <file>controls/BMMessageBox.qml</file>
         <file>controls/BMLoading.qml</file>
+        <file>controls/BMMdEdit.qml</file>
+        <file>controls/html/github.min.css</file>
+        <file>controls/html/highlight.min.js</file>
+        <file>controls/html/index.html</file>
+        <file>controls/html/marked.min.js</file>
     </qresource>
     <qresource prefix="/config">
         <file>basic/Config.qml</file>

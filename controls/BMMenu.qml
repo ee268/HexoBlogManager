@@ -125,6 +125,20 @@ BMRectangle {
         }
     }
 
+    Connections {
+        target: Config
+        function onChangeToMenuChanged() {
+            console.log("haha")
+            if (Config.changeToMenu.length <= 0) return
+            if (Config.changeToMenu[0]) {
+                ctrlMark.moveSelectedMark(true, Config.changeToMenu[1], menuRep)
+            }
+            else {
+                ctrlMark.moveSelectedMark(false, Config.changeToMenu[1], menuRep2)
+            }
+        }
+    }
+
     QtObject {
         id: ctrlMark
 

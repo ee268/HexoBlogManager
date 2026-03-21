@@ -10,6 +10,10 @@ Item {
     opacity: 0
     visible: false
 
+    BMMessageBox {
+        id: msgBox
+    }
+
     Behavior on opacity {
         NumberAnimation {
             duration: Config.aniDuration
@@ -20,7 +24,7 @@ Item {
         let isSuccess = processImport.setFolderPath(dicPath)
         if (!isSuccess) {
             console.log("SetFolderPath failed,", dicPath)
-            Config.setMsgBox(true, "Error", "导入失败")
+            msgBox.setMsgBox(true, "Error", "导入失败")
             return
         }
 
@@ -29,7 +33,7 @@ Item {
         loadPath += processImport.getThemeConfigYml() + "\n"
         loadPath += processImport.getPostPath() + "\n"
         console.log("loadPath:", loadPath)
-        Config.setMsgBox(true, "Success", "导入成功")
+        msgBox.setMsgBox(true, "Success", "导入成功")
     }
 
     FolderDialog {
@@ -86,6 +90,7 @@ Item {
             }
         }
 
+        // AI生成
         Canvas {
             id: dashedRoundedRect
             width: parent.width - 10
@@ -172,7 +177,7 @@ Item {
                 if(drop.hasUrls){
                     if (drop.urls.length > 1) {
                         console.log("too many directory path, only need single directory")
-                        Config.setMsgBox(true, "Error", "不允许导入多个文件夹")
+                        msgBox.setMsgBox(true, "Error", "不允许导入多个文件夹")
                         return
                     }
 

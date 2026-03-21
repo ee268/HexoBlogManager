@@ -11,17 +11,14 @@ QtObject {
    property string font: "qrc:/res/font/dingliezhuhaifont-20240831GengXinBan)-2.ttf"
    property int curMenu: 0
    property bool isTopMenu: true
-   property bool showMsgBox: false
-   property string msgBoxType: "Info"
-   property string msgBoxContent: "content"
+   property var changeToMenu: []
    property bool isLoading: false
    property string loadingText: "加载中"
    property bool loadingCancelBtn: false
+   property int openPostIdx: 0
 
-   function setMsgBox(isShow, type, content) {
-      showMsgBox = isShow
-      msgBoxType = type
-      msgBoxContent = content
+   function changeMenu(isTop, idx) {
+      changeToMenu = [isTop, idx]
    }
 
    readonly property color light: "#fdfbfb"

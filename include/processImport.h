@@ -33,6 +33,7 @@ private:
     QString _configYml;
     QString _themeConfigYml;
     QString _postPath;
+    bool isLoad;
 
 signals:
     void SigImportFinished(QString);

@@ -5,8 +5,26 @@ import "qrc:/config/basic"
 Rectangle {
     id: root
     color: "#e0646464"
-    anchors.fill: parent
-    visible: Config.isLoading
+    parent: Window.contentItem
+    visible: false
+    anchors {
+        top: parent.top
+        topMargin: Config.titleBarHeight
+        left: parent.left
+        right: parent.right
+        bottom: parent.bottom
+    }
+    z: 999
+
+    function open(showClose = false) {
+        visible = true
+        closeBtn.visible = showClose
+    }
+
+    function close() {
+        visible = false
+        closeBtn.visible = false
+    }
 
     BMRectangle {
         id: loadingBg
@@ -27,7 +45,7 @@ Rectangle {
         BMText {
             id: loadingText
             anchors.centerIn: loadingRec
-            text: Config.loadingText
+            text: "加载中"
             font.pixelSize: 20
             property int dotCnt: 0
         }
@@ -45,7 +63,7 @@ Rectangle {
         height: 35
         radius: 8
         color: "#ea4132"
-        visible: Config.loadingCancelBtn
+        visible: false
 
         BMText {
             anchors.centerIn: parent

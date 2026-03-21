@@ -21,10 +21,19 @@ public:
 
     Q_INVOKABLE QJsonArray getBlogInfo();
 
+    Q_INVOKABLE QString getPostContent(int idx);
+
+    Q_INVOKABLE bool savePost(int idx, QByteArray content);
+
+    Q_INVOKABLE void reload();
+
 private:
     void initPosts();
 
     bool isMdSuffix(QString& name);
+
+    void clear();
+
 
     QString _postPath;
     QStringList _postPaths;

@@ -92,7 +92,11 @@ bool ProcessImport::setFolderPath(QString path)
 
     emit SigImportFinished(_postPath);
 
-    saveHistory();
+    if (!isLoad) {
+        saveHistory();
+    }
+    isLoad = false;
+
     return true;
 }
 
@@ -102,7 +106,7 @@ bool ProcessImport::isYmlFile(const QString &path)
         YAML::Node node = YAML::LoadFile(path.toStdString());
         return true;
     }
-    catch (std::exception& e) {
+    catch (const std::exception& e) {
         qDebug() << "isYmlFile false: " << e.what();
         return false;
     }
@@ -146,8 +150,12 @@ void ProcessImport::saveHistory()
     QString path = QCoreApplication::applicationDirPath() + "/history.json";
     QFile r(path);
     if (!r.open(QIODevice::ReadOnly)) {
-        qDebug() << "ReadOnly: save to history.json occur error";
-        return;
+        QFile f(path);
+        if (!f.open(QIODevice::WriteOnly)) {
+            qDebug() << "ReadOnly: save to history.json occur error" << path;
+            return;
+        }
+        f.close();
     }
 
     QByteArray all = r.readAll();
@@ -206,7 +214,7 @@ void ProcessImport::loadHistory()
     QString path = QCoreApplication::applicationDirPath() + "/history.json";
     QFile r(path);
     if (!r.open(QIODevice::ReadOnly)) {
-        qDebug() << "ReadOnly: load to history.json occur error";
+        qDebug() << "ReadOnly: load to history.json occur error" << path;
         return;
     }
 
@@ -220,6 +228,8 @@ void ProcessImport::loadHistory()
 
     QJsonArray array = jsonDoc.array();
     QString folderPath =  array[0].toObject()["path"].toString();
+
+    isLoad = true;
     setFolderPath(folderPath);
 }
 

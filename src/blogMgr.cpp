@@ -9,6 +9,7 @@ BlogMgr::BlogMgr(QObject *obj)
 
 void BlogMgr::setPostPath(QString path)
 {
+    clear();
     _postPath = path;
     initPosts();
 }
@@ -36,6 +37,48 @@ QJsonArray BlogMgr::getBlogInfo()
     return jsonArray;
 }
 
+QString BlogMgr::getPostContent(int idx)
+{
+    if (idx < 0 || idx >= _postPaths.size()) {
+        qDebug() << "index out of range";
+        return QString();
+    }
+
+    QFile r(_postPaths[idx]);
+    if (!r.open(QFile::ReadOnly)) {
+        qDebug() << "open " << _postPaths[idx] << " failed";
+        return QString();
+    }
+
+    QString content = r.readAll();
+    r.close();
+    return content;
+}
+
+bool BlogMgr::savePost(int idx, QByteArray content)
+{
+    if (idx < 0 || idx >= _postPaths.size()) {
+        return false;
+    }
+
+    QString path = _postPaths[idx];
+    QFile f(path);
+    if (!f.open(QFile::WriteOnly)) {
+        qDebug() << "open md file failed, " << path << " error, " << f.errorString();
+        return false;
+    }
+
+    f.write(content);
+    f.close();
+
+    return true;
+}
+
+void BlogMgr::reload()
+{
+    setPostPath(_postPath);
+}
+
 void BlogMgr::initPosts()
 {
     QDir dir(_postPath);
@@ -59,6 +102,13 @@ void BlogMgr::initPosts()
 bool BlogMgr::isMdSuffix(QString& name)
 {
     return name.mid(name.length() - 3) == ".md";
+}
+
+void BlogMgr::clear()
+{
+    _postPath.clear();
+    _postPaths.clear();
+    _fmMgr.clear();
 }
 
 void BlogMgr::SlotImportFinished(QString path)

@@ -5,16 +5,26 @@ import "qrc:/config/basic/"
 
 Rectangle {
     id: root
+    parent: Window.contentItem
     anchors.fill: parent
     color: "#e0646464"
     radius: 8
     z: 999
-    visible: Config.showMsgBox
+    visible: false
+
+    property string msgBoxType: "Info"
+    property string msgBoxContent: ""
+
+    function setMsgBox(isShow, type, content) {
+       visible = isShow
+       msgBoxType = type
+       msgBoxContent = content
+    }
 
     MouseArea {
         anchors.fill: parent
         onClicked: {
-            Config.showMsgBox = false
+            root.visible = false
         }
     }
 
@@ -50,7 +60,7 @@ Rectangle {
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
                 text: {
-                    switch(Config.msgBoxType) {
+                    switch(msgBoxType) {
                     case "Info":
                         return "信息"
                     case "Success":
@@ -109,7 +119,7 @@ Rectangle {
 
                     Image {
                         source: {
-                            switch(Config.msgBoxType) {
+                            switch(msgBoxType) {
                             case "Info":
                                 return "qrc:/res/msgBox/info.png"
                             case "Success":
@@ -130,7 +140,7 @@ Rectangle {
 
                 BMText {
                     anchors.horizontalCenter: parent.horizontalCenter
-                    text: Config.msgBoxContent
+                    text: msgBoxContent
                     font.pixelSize: 20
                 }
             }
@@ -155,8 +165,8 @@ Rectangle {
                 to: 0
                 duration: 5000
                 onFinished: {
-                    if (Config.showMsgBox === false) return
-                    Config.showMsgBox = false
+                    if (root.visible === false) return
+                    root.visible = false
                 }
             }
         }
@@ -166,7 +176,7 @@ Rectangle {
             onClicked: {
                 let point = mapToItem(closeButton, mouseX, mouseY)
                 if (closeButton.contains(Qt.point(point.x, point.y))) {
-                    Config.showMsgBox = false
+                    root.visible = false
                     console.log("close msgBox")
                     return
                 }

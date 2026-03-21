@@ -8,6 +8,14 @@ Item {
     opacity: 0
     visible: false
 
+    BMLoading {
+        id: loading
+    }
+
+    BMMessageBox {
+        id: msgBox
+    }
+
     Behavior on opacity {
         NumberAnimation {
             duration: Config.aniDuration
@@ -117,7 +125,7 @@ Item {
                                 processUpload.addCommand(splitArg[0], splitArg[1])
                             }
 
-                            Config.isLoading = true
+                            loading.open()
                         }
                     }
                 }
@@ -127,19 +135,22 @@ Item {
         Connections {
             target: processUpload
             function onSigFinishedCommand(isSuccess) {
-                Config.isLoading = false
+                loading.close()
+                if (isSuccess) {
+                    msgBox.setMsgBox(true, "Success", "执行成功")
+                }
+                else {
+                    msgBox.setMsgBox(true, "Error", "执行失败")
+                }
             }
             function onSigSendOutput(output) {
                 textArea.append(output)
             }
             function onSigStartServer() {
-                Config.loadingText = "预览中"
-                Config.loadingCancelBtn = true
+                loading.open(true)
             }
             function onSigStopServer() {
-                Config.isLoading = false
-                Config.loadingText = qsTr("加载中")
-                Config.loadingCancelBtn = false
+                loading.close()
             }
         }
     }
@@ -160,7 +171,7 @@ Item {
             anchors.centerIn: parent
             color: "transparent"
             border.width: 2
-            border.color: "#e0dbdbdb"
+            border.color: Config.isLightMode ? "#e0dbdbdb" : "#10ffffff"
             radius: 7
 
             BMText {
@@ -181,6 +192,7 @@ Item {
                     background: Item {}
                     wrapMode: Text.Wrap
                     selectByMouse: true
+                    color: Config.isLightMode ? Config.dark : Config.light
                     font.family: "Monospace"
                     font.pixelSize: 16
                     text: ""

@@ -5,7 +5,7 @@ project(BlogManager VERSION 0.1 LANGUAGES CXX)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(Qt6 REQUIRED COMPONENTS Core Quick Core5Compat QuickControls2 Charts)
+find_package(Qt6 REQUIRED COMPONENTS Core Quick Core5Compat QuickControls2 Charts WebEngineQuick)
 
 qt_standard_project_setup(REQUIRES 6.5)
 
@@ -59,10 +59,10 @@ target_link_directories(appBlogManager PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/lib)
 
 target_link_libraries(appBlogManager PRIVATE
     Qt6::Quick
-    # QWindowKit::Quick
     Qt6::Core5Compat
     Qt6::QuickControls2
     Qt6::Charts
+    Qt6::WebEngineQuick
     yaml-cpp
 )
 target_link_libraries(appBlogManager PRIVATE Qt6::Core)

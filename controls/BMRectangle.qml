@@ -6,6 +6,7 @@ Item {
     property alias radius: rec.radius
     property alias color: rec.color
     property bool shadowVisible: true
+    property alias shadowBlur: multiEffect.shadowBlur
 
     Rectangle {
         id: rec
@@ -22,6 +23,7 @@ Item {
     }
 
     MultiEffect {
+        id: multiEffect
         source: rec
         anchors.fill: rec
         shadowEnabled: true
