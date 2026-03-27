@@ -34,6 +34,11 @@ QMap<QString, QString> FrontMatterMgr::getMap() const
     return _fms;
 }
 
+bool FrontMatterMgr::isEmpty()
+{
+    return _fms.isEmpty();
+}
+
 void FrontMatterMgr::initFM(QString path)
 {
     QFileInfo fInfo(path);

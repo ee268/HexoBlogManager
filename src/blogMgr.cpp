@@ -1,10 +1,23 @@
 #include "include/blogMgr.h"
 #include <QDir>
+#include <QCalendar>
 
-BlogMgr::BlogMgr(QObject *obj)
+BlogMgr::BlogMgr(DateListModel* dateList, CarouselLoader* carousel, QObject *obj)
     : QObject(obj)
 {
+    connect(
+        this,
+        &BlogMgr::SigInitPostsPathFinished,
+        dateList,
+        &DateListModel::SlotImportFinished
+    );
 
+    connect(
+        this,
+        &BlogMgr::SigInitFinished,
+        carousel,
+        &CarouselLoader::SlotRecvPosts
+    );
 }
 
 void BlogMgr::setPostPath(QString path)
@@ -12,6 +25,7 @@ void BlogMgr::setPostPath(QString path)
     clear();
     _postPath = path;
     initPosts();
+    emit SigInitFinished(_postPaths, _fmMgr);
 }
 
 QJsonArray BlogMgr::getBlogInfo()
@@ -97,6 +111,8 @@ void BlogMgr::initPosts()
             _fmMgr[f.filePath()] = fmMgr;
         }
     }
+
+    emit SigInitPostsPathFinished(_postPaths);
 }
 
 bool BlogMgr::isMdSuffix(QString& name)

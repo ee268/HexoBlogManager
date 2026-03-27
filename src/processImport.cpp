@@ -9,8 +9,11 @@
 #include <QCoreApplication>
 #include <QDate>
 
-ProcessImport::ProcessImport(BlogMgr* blogMgr, ProcessUpload* pUpload, QObject* obj/* = nullptr*/)
+ProcessImport::ProcessImport(BlogMgr* blogMgr, ProcessUpload* pUpload,
+                             YmlConfig* ymlCfg, YmlTreeModel* themeModel,
+                             QObject* obj/* = nullptr*/)
     : QObject(obj)
+    , _themeModel(themeModel)
 {
     connect(
         this,
@@ -23,6 +26,12 @@ ProcessImport::ProcessImport(BlogMgr* blogMgr, ProcessUpload* pUpload, QObject* 
         &ProcessImport::SigImportFinished,
         pUpload,
         &ProcessUpload::SlotImportFinished);
+
+    connect(
+        this,
+        &ProcessImport::SigImportConfigFinished,
+        ymlCfg,
+        &YmlConfig::slotInitConfig);
 
     loadHistory();
 }
@@ -54,17 +63,7 @@ bool ProcessImport::setFolderPath(QString path)
                 }
 
                 _configYml = file.filePath();
-                initFlag++;
-                continue;
-            }
-            if (isThemeConfigYml(fName)) {
-                bool isYml = isYmlFile(file.filePath());
-                if (!isYml) {
-                    qDebug() << "not yml file: " << file.filePath();
-                    return false;
-                }
-
-                _themeConfigYml = file.filePath();
+                emit SigImportConfigFinished(_configYml);
                 initFlag++;
                 continue;
             }
@@ -84,7 +83,7 @@ bool ProcessImport::setFolderPath(QString path)
         }
     }
 
-    if (initFlag != 3) {
+    if (initFlag != 2) {
         return false;
     }
 
@@ -98,6 +97,12 @@ bool ProcessImport::setFolderPath(QString path)
     isLoad = false;
 
     return true;
+}
+
+void ProcessImport::setThemeConfigYml(QString path)
+{
+    _themeConfigYml = path.mid(8);
+    _themeModel->init(_themeConfigYml);
 }
 
 bool ProcessImport::isYmlFile(const QString &path)

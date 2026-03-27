@@ -5,7 +5,7 @@ import QtQuick.Effects
 Item {
     property alias radius: rec.radius
     property alias color: rec.color
-    property bool shadowVisible: true
+    property bool shadowVisible: false
     property alias shadowBlur: multiEffect.shadowBlur
 
     Rectangle {
@@ -14,6 +14,8 @@ Item {
         width: parent.width
         radius: 5
         color: Config.isLightMode ? Config.light : Config.dark
+        border.color: "#ccc"
+        border.width: 1
 
         Behavior on color {
             ColorAnimation {

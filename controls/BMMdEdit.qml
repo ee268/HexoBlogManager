@@ -42,6 +42,7 @@ BMWindow {
                 right: parent.right
             }
             height: 40
+            color: "transparent"
 
             Rectangle {
                 id: saveBtn
@@ -93,7 +94,7 @@ BMWindow {
             radius: 4
             border.width: 1
             border.color: "#a0dbdbdb"
-            color: Config.light
+            color: "transparent"
 
             ScrollView {
                 anchors.fill: parent

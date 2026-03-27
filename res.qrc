@@ -25,5 +25,6 @@
         <file>res/msgBox/success.png</file>
         <file>res/msgBox/warning.png</file>
         <file>res/blog/edit.svg</file>
+        <file>res/treeview/arrow.svg</file>
     </qresource>
 </RCC>

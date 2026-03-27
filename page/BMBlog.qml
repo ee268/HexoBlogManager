@@ -54,15 +54,7 @@ BMRectangle {
             spacing: 8
             model: blogList
 
-            ScrollBar.vertical: ScrollBar {
-                anchors.right: parent.right
-                width: 7
-                contentItem: Rectangle {
-                    implicitWidth: 10
-                    radius: 4
-                    color: Config.isLightMode ? Config.dark : Config.light
-                }
-            }
+            ScrollBar.vertical: BMVScrollBar{}
 
             delegate: listViewDelegate
         }

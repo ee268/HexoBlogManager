@@ -23,6 +23,11 @@
         <file>controls/html/highlight.min.js</file>
         <file>controls/html/index.html</file>
         <file>controls/html/marked.min.js</file>
+        <file>controls/BMContributionMap.qml</file>
+        <file>controls/BMToolTip.qml</file>
+        <file>controls/BMAvatarCard.qml</file>
+        <file>controls/BMYmlTreeView.qml</file>
+        <file>controls/BMVScrollBar.qml</file>
     </qresource>
     <qresource prefix="/config">
         <file>basic/Config.qml</file>

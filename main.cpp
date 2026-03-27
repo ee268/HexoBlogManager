@@ -1,5 +1,5 @@
 #include <QQmlApplicationEngine>
-#include <QApplication>
+#include <QGuiApplication>
 #include <QQuickStyle>
 #include "include/global.h"
 #include <QQuickWindow>
@@ -15,7 +15,7 @@ int main(int argc, char *argv[])
     //初始化webengine
     QtWebEngineQuick::initialize();
 
-    QApplication app(argc, argv);
+    QGuiApplication app(argc, argv);
 
     //支持自定义控件样式
     QQuickStyle::setStyle("Basic");

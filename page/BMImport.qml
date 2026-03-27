@@ -1,6 +1,6 @@
 import QtQuick
 import QtQuick.Controls
- import Qt.labs.platform
+import Qt.labs.platform
 import "qrc:/config/basic"
 import "qrc:/qml/controls"
 import Qt5Compat.GraphicalEffects
@@ -247,15 +247,7 @@ Item {
                 model: history
                 clip: true
 
-                ScrollBar.vertical: ScrollBar {
-                    anchors.right: parent.right
-                    width: 7
-                    contentItem: Rectangle {
-                        implicitWidth: 10
-                        radius: 4
-                        color: Config.isLightMode ? Config.dark : Config.light
-                    }
-                }
+                ScrollBar.vertical: BMVScrollBar{}
 
                 delegate: historyDelegate
             }

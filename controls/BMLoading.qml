@@ -16,6 +16,10 @@ Rectangle {
     }
     z: 999
 
+    property alias fontPixel: loadingText.font.pixelSize
+    property alias bgColor: loadingBg.color
+    property alias btnFontPixel: cBtnText.font.pixelSize
+
     function open(showClose = false) {
         visible = true
         closeBtn.visible = showClose
@@ -29,13 +33,13 @@ Rectangle {
     BMRectangle {
         id: loadingBg
         anchors.centerIn: parent
-        width: 230
+        width: parent.width * 0.3
         height: width
 
         Rectangle {
             id: loadingRec
             anchors.centerIn: parent
-            width: 130
+            width: parent.width * 0.6
             height: width
             color: "transparent"
             border.width: 5
@@ -66,6 +70,7 @@ Rectangle {
         visible: false
 
         BMText {
+            id: cBtnText
             anchors.centerIn: parent
             color: Config.light
             font.pixelSize: 16

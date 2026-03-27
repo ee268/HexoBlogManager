@@ -6,6 +6,9 @@
 #include "include/processImport.h"
 #include "include/blogMgr.h"
 #include "include/processUpload.h"
+#include "include/ymlConfig.h"
+#include "include/dateListModel.h"
+#include "include/ymlTreeModel.h"
 
 class GlobalMgr final: public QObject {
     Q_OBJECT
@@ -21,6 +24,10 @@ private:
     ProcessImport* _processImport;
     BlogMgr* _blogMgr;
     ProcessUpload* _processUpload;
+    YmlConfig* _ymlCfg;
+    DateListModel* _dateList;
+    YmlTreeModel* _ymlConfigModel;
+    YmlTreeModel* _ymlThemeModel;
 };
 
 #endif // GLOBAL_H

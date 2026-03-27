@@ -5,7 +5,7 @@ project(BlogManager VERSION 0.1 LANGUAGES CXX)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(Qt6 REQUIRED COMPONENTS Core Quick Core5Compat QuickControls2 Charts WebEngineQuick)
+find_package(Qt6 REQUIRED COMPONENTS Core Quick Core5Compat QuickControls2 WebEngineQuick)
 
 qt_standard_project_setup(REQUIRES 6.5)
 
@@ -39,6 +39,15 @@ qt_add_qml_module(appBlogManager
         SOURCES src/global.cpp
         SOURCES include/processUpload.h
         SOURCES src/processUpload.cpp
+        SOURCES src/ymlConfig.cpp
+        SOURCES include/ymlConfig.h
+        SOURCES
+        SOURCES src/dateListModel.cpp
+        SOURCES include/dateListModel.h
+        SOURCES include/ymlTreeModel.h
+        SOURCES src/ymlTreeModel.cpp
+        SOURCES include/imgDownloader.h
+        SOURCES src/imgDownloader.cpp
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
@@ -61,7 +70,6 @@ target_link_libraries(appBlogManager PRIVATE
     Qt6::Quick
     Qt6::Core5Compat
     Qt6::QuickControls2
-    Qt6::Charts
     Qt6::WebEngineQuick
     yaml-cpp
 )

@@ -8,11 +8,13 @@
 #include <QJsonArray>
 #include <QMap>
 #include "include/frontMatterMgr.h"
+#include "include/dateListModel.h"
+#include "include/carouselloader.h"
 
 class BlogMgr: public QObject {
     Q_OBJECT
 public:
-    explicit BlogMgr(QObject* obj = nullptr);
+    explicit BlogMgr(DateListModel* dateList, CarouselLoader* carousel, QObject* obj = nullptr);
     ~BlogMgr() = default;
 
     void setPostPath(QString path);
@@ -34,10 +36,13 @@ private:
 
     void clear();
 
-
     QString _postPath;
     QStringList _postPaths;
     QMap<QString, FrontMatterMgr> _fmMgr;
+
+signals:
+    void SigInitPostsPathFinished(QStringList);
+    void SigInitFinished(QStringList&, QMap<QString, FrontMatterMgr>&);
 
 public slots:
     void SlotImportFinished(QString path);

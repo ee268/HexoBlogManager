@@ -134,7 +134,7 @@ Rectangle {
 
         onClicked: {
             console.log("clicked linkbtn")
-            Qt.openUrlExternally(externalUrl)
+            Qt.openUrlExternally(ymlConfig.getBlogUrl() + externalUrl)
         }
     }
 

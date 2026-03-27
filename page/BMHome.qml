@@ -1,45 +1,50 @@
 import QtQuick
-import QtCharts
 import QtQuick.Controls
 import "qrc:/config/basic"
 import "qrc:/qml/controls"
 
-Item {
+ScrollView {
+    id: root
     anchors.fill: parent
     visible: false
     opacity: 0
 
-    BMCarousel {
-        id: carousel
-        anchors {
-            left: parent.left
-            // top: parent.top
-            right: parent.right
+    Column {
+        id: contentCol
+        spacing: Config.windowDistance
+
+        BMCarousel {
+            id: carousel
+            width: root.width
+            height: root.height * 0.4
         }
 
-        height: parent.height * 0.4
-    }
+        Row {
+            spacing: Config.windowDistance
 
-    ChartView {
-        title: "Line Chart"
-        anchors {
-            top: carousel.bottom
-            left: parent.left
-            right: parent.right
-            bottom: parent.bottom
+            BMContributionMap {
+                id: contriMap
+                width: root.width * 0.6
+            }
+
+            BMAvatarCard {
+                height: contriMap.height
+                width: root.width * 0.4 - Config.windowDistance
+            }
         }
 
-        antialiasing: true
+        Row {
+            spacing: Config.windowDistance
 
-        LineSeries {
-            name: "Line"
-            XYPoint { x: 0; y: 0 }
-            XYPoint { x: 1.1; y: 2.1 }
-            XYPoint { x: 1.9; y: 3.3 }
-            XYPoint { x: 2.1; y: 2.1 }
-            XYPoint { x: 2.9; y: 4.9 }
-            XYPoint { x: 3.4; y: 3.0 }
-            XYPoint { x: 4.1; y: 3.3 }
+            BMYmlTreeView {
+                width: root.width / 2
+                height: root.height * 0.8
+                model: ymlModel
+            }
+            BMYmlTreeView {
+                width: root.width / 2 - parent.spacing
+                height: root.height * 0.8
+            }
         }
     }
 

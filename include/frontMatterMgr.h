@@ -17,6 +17,8 @@ public:
 
     QMap<QString, QString> getMap() const;
 
+    bool isEmpty();
+
 private:
     void initFM(QString path);
     QStringList splitKV(QString& str);
