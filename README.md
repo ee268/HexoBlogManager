@@ -32,19 +32,19 @@ Qt Creator选中`CMakeLists.txt`导入，选择MSVC 64bit即可
 
 > **主页**
 
-<img src="D:\image\home.gif" alt="home" style="zoom:50%;" />
+<img src="https://github.com/user-attachments/assets/029cf3f8-dbc1-4c06-8a77-d432b63a300e" alt="home" style="zoom:50%;" />
 
 > **导入**
 
-<img src="D:\image\import.gif" alt="import" style="zoom:50%;" />
+<img src="https://github.com/user-attachments/assets/1cc91cf6-ee5a-4d82-bd2e-6a3f4b6eec3e" alt="import" style="zoom:50%;" />
 
 > **部署**
 
-<img src="D:\image\deploy.gif" alt="deploy" style="zoom:50%;" />
+<img src="https://github.com/user-attachments/assets/857312d2-f179-40a8-a516-9c92745de14c" alt="deploy" style="zoom:50%;" />
 
 > **关于**
 
-<img src="D:\image\about.gif" alt="about" style="zoom:50%;" />
+<img src="https://github.com/user-attachments/assets/83a40350-8c86-43fe-bcde-af7ba915212e" alt="about" style="zoom:50%;" />
 
 ---
 
