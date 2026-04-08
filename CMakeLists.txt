@@ -13,6 +13,8 @@ qt_add_executable(appBlogManager
     main.cpp
     include/carouselloader.h
     src/carouselloader.cpp
+    include/systemThemeHelper.h
+    src/systemThemeHelper.cpp
     qml.qrc
     res.qrc
 )
@@ -48,6 +50,9 @@ qt_add_qml_module(appBlogManager
         SOURCES src/ymlTreeModel.cpp
         SOURCES include/imgDownloader.h
         SOURCES src/imgDownloader.cpp
+        SOURCES include/systemThemeHelper.h
+        SOURCES src/systemThemeHelper.cpp
+        SOURCES include/singleton.h
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
@@ -63,7 +68,7 @@ set_target_properties(appBlogManager PROPERTIES
 )
 
 # 链接yaml-cpp
-target_include_directories(appBlogManager PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(appBlogManager PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
 target_link_directories(appBlogManager PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/lib)
 
 target_link_libraries(appBlogManager PRIVATE

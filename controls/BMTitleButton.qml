@@ -19,19 +19,13 @@ Button {
     property alias imgWidth: image.width
 
     contentItem: Item {
-        Image {
+        ColorImage {
             id: image
             anchors.centerIn: parent
             mipmap: true
             width: 12
             height: 12
             fillMode: Image.PreserveAspectFit
-            visible: false
-        }
-
-        ColorOverlay {
-            anchors.fill: image
-            source: image
             color: Config.isLightMode ? "#161616" : "transparent"
         }
     }

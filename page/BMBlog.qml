@@ -166,17 +166,13 @@ BMRectangle {
                         id: editBtn
                         width: 20
                         height: 20
-                        Image {
+
+                        ColorImage {
                             id: editImg
                             width: parent.width
                             height: parent.height
                             fillMode: Image.PreserveAspectCrop
                             source: "qrc:/res/blog/edit.svg"
-                            visible: false
-                        }
-                        ColorOverlay {
-                            anchors.fill: editImg
-                            source: editImg
                             color: Config.themeColor
                         }
                     }
@@ -185,17 +181,13 @@ BMRectangle {
                         id: uploadBtn
                         width: 20
                         height: 20
-                        Image {
+
+                        ColorImage {
                             id: uploadImg
                             width: parent.width
                             height: parent.height
                             fillMode: Image.PreserveAspectCrop
                             source: "qrc:/res/menu_bar/upload.svg"
-                            visible: false
-                        }
-                        ColorOverlay {
-                            anchors.fill: uploadImg
-                            source: uploadImg
                             color: Config.themeColor
                         }
                     }

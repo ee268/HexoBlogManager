@@ -10,12 +10,11 @@ Column {
     property alias source: image.source
     property alias imgHeight: image.height
     property alias imgWidth: image.width
+    property alias imgColor: image.color
     property int textPxSz: 16
     property alias text: txt.text
-    property alias radius: btnBg.radius
-    property int bdWidth: btnBg.border.width
-    property color bdColor: btnBg.border.color
     property var clickedEvent: ()=>{}
+    property alias background: btnBg.color
     property string pId: ""
 
     Button {
@@ -32,20 +31,19 @@ Column {
         bottomInset: 0
 
         contentItem: Item {
-            Image {
+            ColorImage {
                 id: image
                 anchors.centerIn: parent
                 mipmap: true
                 width: 12
                 height: 12
                 fillMode: Image.PreserveAspectFit
-                visible: false
-            }
-
-            ColorOverlay {
-                anchors.fill: image
-                source: image
                 color: Config.themeColor
+                Behavior on color {
+                    ColorAnimation {
+                        duration: 100
+                    }
+                }
             }
         }
 
@@ -53,8 +51,14 @@ Column {
             id: btnBg
             radius: 6
             border.width: 2
-            border.color: "transparent"
+            border.color: Config.themeColor
             color: "transparent"
+
+            Behavior on color {
+                ColorAnimation {
+                    duration: 100
+                }
+            }
         }
 
         onClicked: {

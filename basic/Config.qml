@@ -4,13 +4,17 @@ import QtQuick
 QtObject {
    id: config
    property bool isLightMode: true
+   property bool isAutoMode: false
+   property bool autoLightMode: false
    property int aniDuration: 500
    property int titleBarHeight: 32
    property int windowDistance: 8
    property color themeColor: "#4682b4"
    property string font: "qrc:/res/font/dingliezhuhaifont-20240831GengXinBan)-2.ttf"
    property int curMenu: 0
+   property int lastMenu: -1
    property bool isTopMenu: true
+   property bool lastIsTopMenu: true
    property var changeToMenu: []
    property bool isLoading: false
    property string loadingText: "加载中"

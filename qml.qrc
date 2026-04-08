@@ -28,6 +28,7 @@
         <file>controls/BMAvatarCard.qml</file>
         <file>controls/BMYmlTreeView.qml</file>
         <file>controls/BMVScrollBar.qml</file>
+        <file>controls/BMSwitch.qml</file>
     </qresource>
     <qresource prefix="/config">
         <file>basic/Config.qml</file>

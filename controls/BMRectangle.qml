@@ -14,7 +14,7 @@ Item {
         width: parent.width
         radius: 5
         color: Config.isLightMode ? Config.light : Config.dark
-        border.color: "#ccc"
+        border.color: Config.isLightMode ? "#ccc" : "#666"
         border.width: 1
 
         Behavior on color {

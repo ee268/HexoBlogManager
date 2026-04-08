@@ -63,8 +63,7 @@ BMRectangle {
                 imgHeight: 29
                 textPxSz: 16
                 clickedEvent: () => {
-                    // console.log(index)
-                    ctrlMark.moveSelectedMark(true, index, menuRep)
+                    ctrlMark.changeBtnColor(true, index, menuRep)
                 }
             }
         }
@@ -106,21 +105,8 @@ BMRectangle {
                 imgHeight: 29
                 textPxSz: 16
                 clickedEvent: () => {
-                    // console.log(index)
-                    ctrlMark.moveSelectedMark(false, index, menuRep2)
+                    ctrlMark.changeBtnColor(false, index, menuRep2)
                 }
-            }
-        }
-    }
-
-    Rectangle {
-        id: selectedMark
-        width: 40
-        height: width
-        color: "transparent"
-        Behavior on y {
-            NumberAnimation {
-                duration: Config.aniDuration
             }
         }
     }
@@ -131,10 +117,10 @@ BMRectangle {
             console.log("haha")
             if (Config.changeToMenu.length <= 0) return
             if (Config.changeToMenu[0]) {
-                ctrlMark.moveSelectedMark(true, Config.changeToMenu[1], menuRep)
+                ctrlMark.changeBtnColor(true, Config.changeToMenu[1], menuRep)
             }
             else {
-                ctrlMark.moveSelectedMark(false, Config.changeToMenu[1], menuRep2)
+                ctrlMark.changeBtnColor(false, Config.changeToMenu[1], menuRep2)
             }
         }
     }
@@ -142,73 +128,88 @@ BMRectangle {
     QtObject {
         id: ctrlMark
 
-        property bool isInit: true
+        function changeBtnColor(isTop, idx, menuId) {
+            let item = null;
+            if (Config.lastMenu >= 0) {
+                if (!isTop && Config.isTopMenu) {
+                    item = menuRep.itemAt(Config.curMenu)
+                }
+                else if (isTop && !Config.isTopMenu) {
+                    item = menuRep2.itemAt(Config.curMenu)
+                }
+                else {
+                    item = menuId.itemAt(Config.curMenu)
+                }
 
-        function moveSelectedMark(isTop, idx, menuId) {
-            let item = menuId.itemAt(idx)
+                if (item) {
+                    item.background = "transparent"
+                    item.imgColor = Config.themeColor
+                }
+                else {
+                    console.log("get last item", Config.lastMenu, " failed")
+                    return;
+                }
+            }
+            item = menuId.itemAt(idx)
+
             Config.isTopMenu = isTop
             Config.curMenu = idx
 
-            if (item) {
-                let btnPos = item.mapToItem(selectedMark.parent, 0, 0);
-                if (!isInit) {
-                    selectedMark.x = btnPos.x
-                    selectedMark.y = btnPos.y
-                    selectedMark.radius = item.radius
-                    selectedMark.border.width = item.bdWidth
-                    selectedMark.border.color = Config.themeColor
-                    // console.log("button actual pos: ", btnPos.x, btnPos.y)
-                    return
-                }
-                selectedMark.y = btnPos.y
-                console.log("selectedMark move to", idx, ", isTop", Config.isTopMenu)
+            Config.lastMenu = Config.curMenu
+            Config.lastIsTopMenu = Config.isTopMenu
 
-                switch (item.pId) {
-                case "home" :
-                    console.log("page change to ", item.pId)
-                    pageLoader.sourceComponent = home
-                    break
-                case "blog":
-                    console.log("page change to ", item.pId)
-                    pageLoader.sourceComponent = blog
-                    break
-                case "imp":
-                    console.log("page change to ", item.pId)
-                    pageLoader.sourceComponent = imp
-                    break
-                case "upload":
-                    console.log("page change to ", item.pId)
-                    pageLoader.sourceComponent = upload
-                    break
-                case "about":
-                    console.log("page change to ", item.pId)
-                    pageLoader.sourceComponent = about
-                    break
-                case "setting":
-                    console.log("page change to ", item.pId)
-                    pageLoader.sourceComponent = setting
-                    break
-                default:
-                    console.log("not found pId:", item.pId)
-                    break
-                }
+            if (item) {
+                item.imgColor = "white"
+                item.background = Config.themeColor
+                skipToPage(item.pId)
             }
             else {
                 console.log("get item", idx, " failed")
+                return;
+            }
+        }
+
+        function skipToPage(pageId) {
+            switch (pageId) {
+                case "home" :
+                    console.log("page change to ", pageId)
+                    pageLoader.sourceComponent = home
+                    break
+                case "blog":
+                    console.log("page change to ", pageId)
+                    pageLoader.sourceComponent = blog
+                    break
+                case "imp":
+                    console.log("page change to ", pageId)
+                    pageLoader.sourceComponent = imp
+                    break
+                case "upload":
+                    console.log("page change to ", pageId)
+                    pageLoader.sourceComponent = upload
+                    break
+                case "about":
+                    console.log("page change to ", pageId)
+                    pageLoader.sourceComponent = about
+                    break
+                case "setting":
+                    console.log("page change to ", pageId)
+                    pageLoader.sourceComponent = setting
+                    break
+                default:
+                    console.log("not found pId:", pageId)
+                    break
             }
         }
     }
 
     onHeightChanged: {
         if (!Config.isTopMenu) {
-            ctrlMark.moveSelectedMark(Config.isTopMenu, Config.curMenu, menuRep2)
+            ctrlMark.changeBtnColor(Config.isTopMenu, Config.curMenu, menuRep2)
         }
     }
 
     Component.onCompleted: {
-        ctrlMark.isInit = false
-        ctrlMark.moveSelectedMark(Config.isTopMenu, 0, menuRep)
-        ctrlMark.isInit = true
+        ctrlMark.changeBtnColor(Config.isTopMenu, 0, menuRep)
         visible = true
         opacity = 1
     }

@@ -44,6 +44,11 @@ ScrollView {
             BMYmlTreeView {
                 width: root.width / 2 - parent.spacing
                 height: root.height * 0.8
+                Component.onCompleted: {
+                    if (globalMgr.contains("themeConfigYml")) {
+                        processImport.setThemeConfigYml(globalMgr.getValue("themeConfigYml"))
+                    }
+                }
             }
         }
     }

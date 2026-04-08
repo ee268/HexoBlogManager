@@ -12,9 +12,20 @@ BMWindow {
     maximumWidth: Screen.desktopAvailableWidth
     maximumHeight: Screen.desktopAvailableHeight
     title: qsTr("Blog Manager")
-    Component.onCompleted: {
-        console.log("screen size: ", Screen.width, Screen.height)
-        console.log("desktop screen size: ", Screen.desktopAvailableWidth, Screen.desktopAvailableHeight)
+
+    Connections {
+        target: themeHelper
+        function onColorSchemeChanged(scheme) {
+            if (Config.isAutoMode) {
+                let colorScheme = themeHelper.colorScheme
+                if (colorScheme === themeHelper.V_Dark()) {
+                    Config.isLightMode = false
+                }
+                else if (colorScheme === themeHelper.V_Light()) {
+                    Config.isLightMode = true
+                }
+            }
+        }
     }
 
     //内容区
@@ -84,6 +95,15 @@ BMWindow {
         Component {
             id: setting
             BMSetting {}
+        }
+    }
+
+    Component.onCompleted: {
+        console.log("screen size: ", Screen.width, Screen.height)
+        console.log("desktop screen size: ", Screen.desktopAvailableWidth, Screen.desktopAvailableHeight)
+
+        if (globalMgr.contains("isAutoMode")) {
+            Config.isAutoMode = globalMgr.getValue("isAutoMode")
         }
     }
 }

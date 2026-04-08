@@ -66,18 +66,13 @@ Item {
                 anchors.horizontalCenter: parent.horizontalCenter
                 opacity: 0.5
 
-                Image {
+                ColorImage {
                     id: image
                     anchors.centerIn: parent
                     source: "qrc:/res/import/importBox.svg"
                     fillMode: Image.PreserveAspectFit
                     width: parent.width
                     height: parent.height
-                    visible: false
-                }
-                ColorOverlay {
-                    anchors.fill: image
-                    source: image
                     color: Config.themeColor
                 }
             }

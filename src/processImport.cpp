@@ -220,6 +220,7 @@ void ProcessImport::loadHistory()
     QFile r(path);
     if (!r.open(QIODevice::ReadOnly)) {
         qDebug() << "ReadOnly: load to history.json occur error" << path;
+        r.close();
         return;
     }
 

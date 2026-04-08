@@ -23,6 +23,7 @@ int main(int argc, char *argv[])
     QQmlApplicationEngine engine;
 
     GlobalMgr gMgr(engine, &app);
+    engine.rootContext()->setContextProperty("globalMgr", &gMgr);
 
     QObject::connect(
         &engine,

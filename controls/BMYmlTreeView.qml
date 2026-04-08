@@ -10,7 +10,9 @@ BMRectangle {
     Connections {
         target: ymlThemeModel
         function onSigInitFinished() {
-            model = ymlThemeModel
+            if (!model) {
+                model = ymlThemeModel
+            }
         }
     }
 
@@ -24,6 +26,7 @@ BMRectangle {
         onAccepted: {
             console.log(currentFile)
             processImport.setThemeConfigYml(currentFile)
+            globalMgr.setValue("themeConfigYml", currentFile.toString())
         }
     }
 

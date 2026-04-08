@@ -10,7 +10,6 @@ BMRectangle {
     color: Config.isLightMode ? Config.light : "#8a8a8a"
     layer.enabled: true
     layer.effect: OpacityMask {
-        source: root
         maskSource: Rectangle {
             width: root.width
             height: root.height
@@ -83,7 +82,7 @@ BMRectangle {
                 id: timer
                 interval: 1000
                 repeat: true
-                running: true
+                running: false
                 onTriggered: {
                     // console.log("timer triggered")
                     behavior.enabled = false
@@ -98,7 +97,7 @@ BMRectangle {
                 id: timer2
                 interval: 1000
                 repeat: true
-                running: true
+                running: false
                 onTriggered: {
                     // console.log("timer triggered")
                     behavior2.enabled = false
@@ -113,7 +112,7 @@ BMRectangle {
                 id: timer3
                 interval: 1000
                 repeat: true
-                running: true
+                running: false
                 onTriggered: {
                     // console.log("timer triggered")
                     behavior3.enabled = false
@@ -146,7 +145,6 @@ BMRectangle {
                             radius: 6
                             layer.enabled: true
                             layer.effect: OpacityMask {
-                                source: rect1
                                 maskSource: Rectangle {
                                     width: rect1.width
                                     height: rect1.height
@@ -190,7 +188,6 @@ BMRectangle {
                             radius: 6
                             layer.enabled: true
                             layer.effect: OpacityMask {
-                                source: rect2
                                 maskSource: Rectangle {
                                     width: rect2.width
                                     height: rect2.height
@@ -235,7 +232,6 @@ BMRectangle {
                             radius: 6
                             layer.enabled: true
                             layer.effect: OpacityMask {
-                                source: rect3
                                 maskSource: Rectangle {
                                     width: rect3.width
                                     height: rect3.height
@@ -390,5 +386,8 @@ BMRectangle {
     Component.onCompleted: {
         visible = true
         opacity = 1
+        timer.start()
+        timer2.start()
+        timer3.start()
     }
 }
