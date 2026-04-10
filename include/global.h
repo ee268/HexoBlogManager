@@ -44,6 +44,9 @@ private:
     SystemThemeHelper* _themeHelper;
 
     QJsonDocument _doc;
+
+signals:
+    void sigRefreshMenuColor();
 };
 
 #endif // GLOBAL_H

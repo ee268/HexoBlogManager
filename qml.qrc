@@ -29,6 +29,7 @@
         <file>controls/BMYmlTreeView.qml</file>
         <file>controls/BMVScrollBar.qml</file>
         <file>controls/BMSwitch.qml</file>
+        <file>controls/BMColorDialog.qml</file>
     </qresource>
     <qresource prefix="/config">
         <file>basic/Config.qml</file>

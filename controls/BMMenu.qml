@@ -202,6 +202,34 @@ BMRectangle {
         }
     }
 
+    Connections {
+        target: globalMgr
+        function onSigRefreshMenuColor() {
+            refreshColor()
+        }
+    }
+
+    function refreshColor() {
+        for (let i = 0; i < topMenuModel.count; i++) {
+            let item = menuRep.itemAt(i)
+            if (i === Config.curMenu && Config.isTopMenu) {
+                item.imgColor = "white"
+                item.background = Config.themeColor
+                continue
+            }
+            item.imgColor = Config.themeColor
+        }
+        for (let i = 0; i < bottomMenuModel.count; i++) {
+            let item = menuRep2.itemAt(i)
+            if (i === Config.curMenu && !Config.isTopMenu) {
+                item.imgColor = "white"
+                item.background = Config.themeColor
+                continue
+            }
+            item.imgColor = Config.themeColor
+        }
+    }
+
     onHeightChanged: {
         if (!Config.isTopMenu) {
             ctrlMark.changeBtnColor(Config.isTopMenu, Config.curMenu, menuRep2)

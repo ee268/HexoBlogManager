@@ -105,5 +105,8 @@ BMWindow {
         if (globalMgr.contains("isAutoMode")) {
             Config.isAutoMode = globalMgr.getValue("isAutoMode")
         }
+        if (globalMgr.contains("themeColor")) {
+            Config.themeColor = globalMgr.getValue("themeColor")
+        }
     }
 }
