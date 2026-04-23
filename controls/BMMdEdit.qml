@@ -20,6 +20,8 @@ BMWindow {
 
     BMLoading {
         id: loading
+        running: false
+        z: 99
     }
 
     Item {
@@ -183,19 +185,9 @@ BMWindow {
         }
     }
 
-    Timer {
-        id: delayInitTimer
-        interval: 100 // 延迟 100ms 足够让主线程先把 loading 动画跑起来
-        repeat: false
-        running: false
-        onTriggered: {
-            webViewLoader.active = true; // 定时器触发后，开始加载 WebEngineView
-        }
-    }
-
     function closeLoading() {
         if (isCLoaded && isPLoaded) {
-            loading.close()
+            loading.running = false
         }
     }
 
@@ -207,6 +199,6 @@ BMWindow {
     }
 
     Component.onCompleted: {
-        loading.open()
+        loading.running = true
     }
 }

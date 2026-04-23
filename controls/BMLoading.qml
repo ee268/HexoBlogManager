@@ -1,12 +1,12 @@
 import QtQuick
+import QtQuick.Controls
 import Qt5Compat.GraphicalEffects
 import "qrc:/config/basic"
 
-Rectangle {
-    id: root
-    color: "#e0646464"
+BusyIndicator {
+    id: control
+    running: false
     parent: Window.contentItem
-    visible: false
     anchors {
         top: parent.top
         topMargin: Config.titleBarHeight
@@ -14,147 +14,117 @@ Rectangle {
         right: parent.right
         bottom: parent.bottom
     }
-    z: 999
+    property int fontPixel: 20
+    property int btnFontPixel: 16
+    property bool showClose: false
+    property int bgWidth: 300
+    property int bgHeight: 100
 
-    property alias fontPixel: loadingText.font.pixelSize
-    property alias bgColor: loadingBg.color
-    property alias btnFontPixel: cBtnText.font.pixelSize
+    contentItem: Rectangle {
+        id: root
+        color: "#e0646464"
+        visible: control.running
 
-    function open(showClose = false) {
-        visible = true
-        closeBtn.visible = showClose
-    }
+        BMRectangle {
+            id: loadingBg
+            anchors.centerIn: parent
+            width: bgWidth
+            height: bgHeight
 
-    function close() {
-        visible = false
-        closeBtn.visible = false
-    }
+            Column {
+                anchors.centerIn: parent
+                spacing: 10
 
-    BMRectangle {
-        id: loadingBg
-        anchors.centerIn: parent
-        width: parent.width * 0.3
-        height: width
+                Item {
+                    id: loadingRecMask
+                    width: loadingBg.width * 0.8
+                    height: 5
+                    clip: true
+
+                    Rectangle {
+                        id: loadingRec
+                        width: parent.width
+                        height: parent.height
+                        radius: height
+                        color: Config.themeColor
+                        x: -width
+                    }
+                }
+
+                BMText {
+                    id: loadingText
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    text: "加载中..."
+                    font.pixelSize: fontPixel
+                }
+            }
+        }
+
+        PropertyAnimation {
+            id: ani
+            target: loadingRec
+            property: "x"
+            to: loadingRec.width
+            duration: 1500
+            onFinished: {
+                ani2.restart()
+            }
+        }
+
+        PropertyAnimation {
+            id: ani2
+            target: loadingRec
+            property: "x"
+            to: loadingRec.width + 100
+            duration: 300
+            onFinished: {
+                loadingRec.x = -loadingRec.width
+                ani.restart()
+            }
+        }
 
         Rectangle {
-            id: loadingRec
-            anchors.centerIn: parent
-            width: parent.width * 0.6
-            height: width
-            color: "transparent"
-            border.width: 5
-            border.color: Config.themeColor
-        }
-
-        BMText {
-            id: loadingText
-            anchors.centerIn: loadingRec
-            text: "加载中"
-            font.pixelSize: 20
-            property int dotCnt: 0
-        }
-    }
-
-    Rectangle {
-        id: closeBtn
-        anchors {
-            top: loadingBg.bottom
-            topMargin: 15
-            horizontalCenter: parent.horizontalCenter
-        }
-
-        width: 110
-        height: 35
-        radius: 8
-        color: "#ea4132"
-        visible: false
-
-        BMText {
-            id: cBtnText
-            anchors.centerIn: parent
-            color: Config.light
-            font.pixelSize: 16
-            text: qsTr("停止")
-        }
-    }
-
-
-    Timer {
-        id: textTimer
-        interval: 700
-        repeat: true
-        running: true
-        onTriggered: {
-            if (loadingText.dotCnt === 3) {
-                loadingText.text = loadingText.text.slice(0, loadingText.text.length - loadingText.dotCnt)
-                loadingText.dotCnt = 0
-                return
+            id: closeBtn
+            anchors {
+                top: loadingBg.bottom
+                topMargin: 15
+                horizontalCenter: parent.horizontalCenter
             }
-            loadingText.text += "."
-            loadingText.dotCnt++
-        }
-    }
 
-    RotationAnimation {
-        id: rotateAni
-        target: loadingRec
-        loops: Animation.Infinite
-        to: loadingRec.rotation + 360
-        duration: 5000
-    }
+            width: 110
+            height: 35
+            radius: 8
+            color: "#ea4132"
+            visible: showClose
 
-
-    SequentialAnimation {
-        id: borderAni
-        loops: Animation.Infinite
-        ParallelAnimation {
-            NumberAnimation {
-                target: loadingRec
-                property: "border.width"
-                to: 15
-                duration: 1000
-                easing.type: Easing.InOutQuad
-            }
-            NumberAnimation {
-                target: loadingRec
-                property: "scale"
-                to: 1.1
-                duration: 1000
-                easing.type: Easing.InOutQuad
+            BMText {
+                id: cBtnText
+                anchors.centerIn: parent
+                color: Config.light
+                font.pixelSize: btnFontPixel
+                text: qsTr("停止")
             }
         }
 
-        ParallelAnimation {
-            NumberAnimation {
-                target: loadingRec
-                property: "border.width"
-                to: 5
-                duration: 1000
-                easing.type: Easing.InOutQuad
+        MouseArea {
+            anchors.fill: parent
+            onClicked: {
+                let point = mapToItem(closeBtn, mouseX, mouseY)
+                if (closeBtn.contains(Qt.point(point.x, point.y))) {
+                    processUpload.stopHexoS()
+                    return
+                }
             }
-            NumberAnimation {
-                target: loadingRec
-                property: "scale"
-                to: 1
-                duration: 1000
-                easing.type: Easing.InOutQuad
-            }
+        }
+
+        Component.onCompleted: {
+            ani.start()
         }
     }
 
-    MouseArea {
-        anchors.fill: parent
-        onClicked: {
-            let point = mapToItem(closeBtn, mouseX, mouseY)
-            if (closeBtn.contains(Qt.point(point.x, point.y))) {
-                processUpload.stopHexoS()
-                return
-            }
+    onShowCloseChanged: {
+        if (showClose && running) {
+            closeBtn.visible = showClose
         }
-    }
-
-    Component.onCompleted: {
-        rotateAni.start()
-        borderAni.start()
     }
 }

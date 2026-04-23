@@ -10,6 +10,8 @@ Item {
 
     BMLoading {
         id: loading
+        running: false
+        z: 99
     }
 
     BMMessageBox {
@@ -95,7 +97,7 @@ Item {
 
                     Behavior on color {
                         ColorAnimation {
-                            duration: Config.aniDuration
+                            duration: 100
                         }
                     }
 
@@ -108,10 +110,11 @@ Item {
                     MouseArea {
                         anchors.fill: parent
                         hoverEnabled: true
-                        onEntered: {
+                        cursorShape: Qt.PointingHandCursor
+                        onPressed: {
                             btnRec.color = Config.themeColor
                         }
-                        onExited: {
+                        onReleased: {
                             btnRec.color = "transparent"
                         }
 
@@ -125,7 +128,7 @@ Item {
                                 processUpload.addCommand(splitArg[0], splitArg[1])
                             }
 
-                            loading.open()
+                            loading.running = true
                         }
                     }
                 }
@@ -135,7 +138,7 @@ Item {
         Connections {
             target: processUpload
             function onSigFinishedCommand(isSuccess) {
-                loading.close()
+                loading.running = false
                 if (isSuccess) {
                     msgBox.setMsgBox(true, "Success", "执行成功")
                 }
@@ -147,10 +150,10 @@ Item {
                 textArea.append(output)
             }
             function onSigStartServer() {
-                loading.open(true)
+                loading.showClose = true
             }
             function onSigStopServer() {
-                loading.close()
+                loading.running = false
             }
         }
     }
