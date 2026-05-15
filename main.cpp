@@ -1,7 +1,9 @@
 #include <QQmlApplicationEngine>
 #include <QGuiApplication>
 #include <QQuickStyle>
+#include <QtQml>
 #include "include/global.h"
+#include "include/ymlHighlighter.h"
 #include <QQuickWindow>
 #include <QtWebEngineQuick>
 
@@ -16,11 +18,14 @@ int main(int argc, char *argv[])
     QtWebEngineQuick::initialize();
 
     QGuiApplication app(argc, argv);
+    app.setWindowIcon(QIcon(":/res/blogMgrIcon.png"));
 
     //支持自定义控件样式
     QQuickStyle::setStyle("Basic");
 
     QQmlApplicationEngine engine;
+
+    qmlRegisterType<YmlHighlighter>("BlogManager", 1, 0, "YmlHighlighter");
 
     GlobalMgr gMgr(engine, &app);
     engine.rootContext()->setContextProperty("globalMgr", &gMgr);

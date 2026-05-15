@@ -6,6 +6,13 @@ BMRectangle {
     id: root
     height: rectSize * 7 + 6 * 3 + 51 + levelItem.height
     property int rectSize: 14
+    property int cellSpacing: 3
+
+    BMToolTip {
+        id: hoverTip
+        visible: false
+        z: 9999
+    }
 
     Item {
         id: borderItem
@@ -19,8 +26,9 @@ BMRectangle {
             model: dateModel
             clip: true
             orientation: ListView.Horizontal
-            spacing: 3
+            spacing: cellSpacing
             cacheBuffer: 1000
+            reuseItems: true
             delegate: Column {
                 id: col
                 spacing: 5
@@ -48,42 +56,111 @@ BMRectangle {
                     }
                 }
 
-                Grid {
-                    rows: 7
-                    columns: days == 28 ? 4 : 5
-                    flow: Grid.TopToBottom
-                    spacing: 3
+                Item {
+                    id: gridItem
+                    property int columns: days == 28 ? 4 : 5
+                    width: columns * rectSize + (columns - 1) * cellSpacing
+                    height: 7 * rectSize + 6 * cellSpacing
 
-                    Repeater {
-                        model: days
-                        delegate: Rectangle {
-                            width: rectSize
-                            height: rectSize
-                            radius: 2
-                            BMToolTip {
-                                id: toolTip
-                                text: dateModel.getToolTipText(col.idx, index)
-                            }
+                    Canvas {
+                        id: gridCanvas
+                        anchors.fill: parent
+                        renderTarget: Canvas.Image
+                        renderStrategy: Canvas.Threaded
+                        antialiasing: true
+                        
+                        function roundRect(ctx, x, y, w, h, r) {
+                            ctx.beginPath()
+                            ctx.moveTo(x + r, y)
+                            ctx.lineTo(x + w - r, y)
+                            ctx.quadraticCurveTo(x + w, y, x + w, y + r)
+                            ctx.lineTo(x + w, y + h - r)
+                            ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h)
+                            ctx.lineTo(x + r, y + h)
+                            ctx.quadraticCurveTo(x, y + h, x, y + h - r)
+                            ctx.lineTo(x, y + r)
+                            ctx.quadraticCurveTo(x, y, x + r, y)
+                            ctx.closePath()
+                        }
+                        
+                        onPaint: {
+                            var ctx = getContext("2d")
+                            ctx.reset()
+                            ctx.clearRect(0, 0, width, height)
 
-                            // 根据 level 映射颜色
-                            color: Config.isLightMode ? dateModel.getColorLevel(col.idx, index, "light") : dateModel.getColorLevel(col.idx, index, "dark")
-
-                            // 鼠标悬停效果
-                            MouseArea {
-                                anchors.fill: parent
-                                hoverEnabled: true
-                                onEntered: {
-                                    parent.border.color = "#000000"
-                                    toolTip.visible = true
-                                }
-
-                                onExited: {
-                                    parent.border.color = "transparent"
-                                    toolTip.visible = false
-                                }
+                            for (var i = 0; i < days; i++) {
+                                var week = Math.floor(i / 7)
+                                var row = i % 7
+                                var x = week * (rectSize + cellSpacing)
+                                var y = row * (rectSize + cellSpacing)
+                                ctx.fillStyle = Config.isLightMode
+                                    ? dateModel.getColorLevel(col.idx, i, "light")
+                                    : dateModel.getColorLevel(col.idx, i, "dark")
+                                roundRect(ctx, x, y, rectSize, rectSize, 2)
+                                ctx.fill()
                             }
                         }
                     }
+
+                    Rectangle {
+                        id: hoverRect
+                        width: rectSize
+                        height: rectSize
+                        radius: 2
+                        color: "transparent"
+                        border.color: "#000000"
+                        visible: false
+                    }
+
+                    MouseArea {
+                        anchors.fill: parent
+                        hoverEnabled: true
+                        function indexFromPosition(x, y) {
+                            var colIndex = Math.floor(x / (rectSize + cellSpacing))
+                            var rowIndex = Math.floor(y / (rectSize + cellSpacing))
+                            if (colIndex < 0 || rowIndex < 0) {
+                                return -1
+                            }
+                            if (colIndex >= gridItem.columns || rowIndex >= 7) {
+                                return -1
+                            }
+                            var dayIndex = colIndex * 7 + rowIndex
+                            return dayIndex < days ? dayIndex : -1
+                        }
+
+                        function updateTip(x, y, dayIndex) {
+                            hoverRect.x = x
+                            hoverRect.y = y
+                            hoverRect.visible = true
+
+                            var p = gridItem.mapToItem(root, x, y)
+                            hoverTip.x = p.x + rectSize + 4
+                            hoverTip.y = p.y - hoverTip.height - 4
+                            hoverTip.text = dateModel.getToolTipText(col.idx, dayIndex)
+                            hoverTip.visible = true
+                        }
+
+                        onPositionChanged: function(mouseEvent) {
+                            var dayIndex = indexFromPosition(mouseEvent.x, mouseEvent.y)
+                            if (dayIndex >= 0) {
+                                var colIndex = Math.floor(dayIndex / 7)
+                                var rowIndex = dayIndex % 7
+                                var x = colIndex * (rectSize + cellSpacing)
+                                var y = rowIndex * (rectSize + cellSpacing)
+                                updateTip(x, y, dayIndex)
+                            } else {
+                                hoverRect.visible = false
+                                hoverTip.visible = false
+                            }
+                        }
+
+                        onExited: {
+                            hoverRect.visible = false
+                            hoverTip.visible = false
+                        }
+                    }
+
+                    Component.onCompleted: gridCanvas.requestPaint()
                 }
             }
 

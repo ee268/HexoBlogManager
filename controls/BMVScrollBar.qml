@@ -2,7 +2,8 @@ import QtQuick
 import QtQuick.Controls
 
 ScrollBar {
-    anchors.right: parent.right
+    id: root
+    policy: ScrollBar.AsNeeded
     width: 7
     contentItem: Rectangle {
         implicitWidth: 10

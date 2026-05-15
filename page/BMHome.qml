@@ -9,6 +9,11 @@ ScrollView {
     visible: false
     opacity: 0
 
+    ScrollBar.vertical: BMVScrollBar{
+        height: root.height
+        anchors.right: root.right
+    }
+
     Column {
         id: contentCol
         spacing: Config.windowDistance
@@ -36,20 +41,38 @@ ScrollView {
         Row {
             spacing: Config.windowDistance
 
-            BMYmlTreeView {
+            BMYmlEditor {
                 width: root.width / 2
                 height: root.height * 0.8
-                model: ymlModel
-            }
-            BMYmlTreeView {
-                width: root.width / 2 - parent.spacing
-                height: root.height * 0.8
-                Component.onCompleted: {
-                    if (globalMgr.contains("themeConfigYml")) {
-                        processImport.setThemeConfigYml(globalMgr.getValue("themeConfigYml"))
-                    }
+                text: globalMgr.getConfigYmlContent()
+                textChangedEvent: () => {
+                    globalMgr.setConfigYmlContent(text)
                 }
             }
+
+            BMYmlEditor {
+                width: root.width / 2 - parent.spacing
+                height: root.height * 0.8
+                text: globalMgr.getThemeConfigYmlContent()
+                textChangedEvent: () => {
+                    globalMgr.setThemeYmlContent(text)
+                }
+            }
+
+            // BMYmlTreeView {
+            //     width: root.width / 2
+            //     height: root.height * 0.8
+            //     model: ymlModel
+            // }
+            // BMYmlTreeView {
+            //     width: root.width / 2 - parent.spacing
+            //     height: root.height * 0.8
+            //     Component.onCompleted: {
+            //         if (globalMgr.contains("themeConfigYml")) {
+            //             processImport.setThemeConfigYml(globalMgr.getValue("themeConfigYml"))
+            //         }
+            //     }
+            // }
         }
     }
 

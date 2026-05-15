@@ -26,5 +26,10 @@
         <file>res/msgBox/warning.png</file>
         <file>res/blog/edit.svg</file>
         <file>res/treeview/arrow.svg</file>
+        <file>res/blogMgrIcon.png</file>
+        <file>res/yml_save_btn/closesaveyml.svg</file>
+        <file>res/yml_save_btn/configymlsave.svg</file>
+        <file>res/yml_save_btn/themeymlsave.svg</file>
+        <file>res/yml_save_btn/ymlsave.svg</file>
     </qresource>
 </RCC>

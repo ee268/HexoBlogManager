@@ -8,7 +8,6 @@
 #include "include/processUpload.h"
 #include "include/ymlConfig.h"
 #include "include/dateListModel.h"
-#include "include/ymlTreeModel.h"
 #include "include/systemThemeHelper.h"
 #include <QJsonDocument>
 
@@ -25,12 +24,25 @@ public:
 
     Q_INVOKABLE bool contains(const QString key);
 
+    Q_INVOKABLE QString getConfigYmlContent();
+
+    Q_INVOKABLE QString getThemeConfigYmlContent();
+
+    Q_INVOKABLE bool saveConfigYml();
+    Q_INVOKABLE bool saveThemeYml();
+
+    Q_INVOKABLE void setConfigYmlContent(QString content);
+    Q_INVOKABLE void setThemeYmlContent(QString content);
+
 private:
     void initContextProperty();
 
     void readSettings();
 
     void saveSettings();
+
+    QString _configYmlContent;
+    QString _themeYmlContent;
 
     QQmlApplicationEngine& _engine;
     CarouselLoader* _carouselLouader;
@@ -39,8 +51,6 @@ private:
     ProcessUpload* _processUpload;
     YmlConfig* _ymlCfg;
     DateListModel* _dateList;
-    YmlTreeModel* _ymlConfigModel;
-    YmlTreeModel* _ymlThemeModel;
     SystemThemeHelper* _themeHelper;
 
     QJsonDocument _doc;

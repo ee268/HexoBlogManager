@@ -12,6 +12,7 @@
 #include <QString>
 #include "include/frontMatterMgr.h"
 #include "include/imgDownloader.h"
+#include <QTimer>
 
 class CarouselLoader: public QObject
 {
@@ -24,15 +25,19 @@ public:
     QString GetMainColor(QString path);
 
     Q_INVOKABLE QJsonArray GetImgList();
+    Q_INVOKABLE bool isLoaded();
 
 private:
     QString getRoute(QString& path, FrontMatterMgr& fm);
 
     ImgDownloader* _imgDownloader;
     QJsonArray _imgList;
+    bool _isLoaded;
+    QTimer* _timer;
 
 signals:
     void SigDownloadImg(QJsonObject);
+    void sigFinishedAllImg();
 
 public slots:
     void SlotRecvPosts(QStringList& key, QMap<QString, FrontMatterMgr>& fms);

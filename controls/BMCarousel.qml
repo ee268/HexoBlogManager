@@ -7,6 +7,18 @@ BMRectangle {
     ListModel {
         id: cardModel
         Component.onCompleted: {
+            if (carouselLoader.isLoaded() && cardModel.count === 0) {
+                let list = carouselLoader.GetImgList()
+                for (let i = 0; i < list.length; i++) {
+                    cardModel.append(list[i])
+                }
+            }
+        }
+    }
+
+    Connections {
+        target: carouselLoader
+        function onSigFinishedAllImg() {
             let list = carouselLoader.GetImgList()
             for (let i = 0; i < list.length; i++) {
                 cardModel.append(list[i])
@@ -38,7 +50,7 @@ BMRectangle {
 
                 spacing: 5
                 orientation: ListView.Horizontal
-                // interactive: false
+                interactive: false
                 model: cardModel
                 delegate: BMCard {
                     height: root.height * 0.95

@@ -46,13 +46,18 @@ qt_add_qml_module(appBlogManager
         SOURCES
         SOURCES src/dateListModel.cpp
         SOURCES include/dateListModel.h
-        SOURCES include/ymlTreeModel.h
-        SOURCES src/ymlTreeModel.cpp
+        SOURCES
+        SOURCES
         SOURCES include/imgDownloader.h
         SOURCES src/imgDownloader.cpp
+        SOURCES include/ymlHighlighter.h
+        SOURCES src/ymlHighlighter.cpp
         SOURCES include/systemThemeHelper.h
         SOURCES src/systemThemeHelper.cpp
-        SOURCES include/singleton.h
+        SOURCES
+        SOURCES
+        SOURCES
+        SOURCES
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.

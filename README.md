@@ -1,5 +1,5 @@
 # Hexo博客管理
-基于C++/QML编写hexo博客管理程序，仅支持导入用GithubPages托管的博客
+基于C++/QML编写hexo博客管理工具，仅支持导入用GithubPages托管的博客
 
 ---
 

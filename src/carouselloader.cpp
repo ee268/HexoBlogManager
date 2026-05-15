@@ -4,10 +4,22 @@
 CarouselLoader::CarouselLoader(QObject *parent/* = nullptr*/)
     : QObject(parent)
     , _imgDownloader(new ImgDownloader(this))
+    , _isLoaded(false)
+    , _timer(new QTimer(this))
 {
     connect(this, &CarouselLoader::SigDownloadImg, _imgDownloader, &ImgDownloader::SlotDowndloadImg);
     connect(_imgDownloader, &ImgDownloader::SigImgDownloaded, this, &CarouselLoader::SlotDownloadedImg);
     connect(_imgDownloader, &ImgDownloader::SigImgDownloadFailed, this, &CarouselLoader::SlotDownloadFailedImg);
+
+    connect(_timer, &QTimer::timeout, [this](){
+        qDebug() << _imgList.size() << " " << _isLoaded;
+        if (_isLoaded) return;
+        if (_imgList.size() == 5) {
+            emit sigFinishedAllImg();
+        }
+    });
+    _timer->setInterval(300);
+    _timer->start();
 }
 
 CarouselLoader::~CarouselLoader()
@@ -69,7 +81,14 @@ QString CarouselLoader::GetMainColor(QString path)
 
 QJsonArray CarouselLoader::GetImgList()
 {
+    _isLoaded = true;
+    _timer->stop();
     return _imgList;
+}
+
+bool CarouselLoader::isLoaded()
+{
+    return _isLoaded;
 }
 
 QString CarouselLoader::getRoute(QString &path, FrontMatterMgr &fm)
@@ -85,7 +104,7 @@ QString CarouselLoader::getRoute(QString &path, FrontMatterMgr &fm)
 
 void CarouselLoader::SlotRecvPosts(QStringList &key, QMap<QString, FrontMatterMgr>& fms)
 {
-    for (int i = 0; i < key.length(); i++) {
+    for (int i = 0; i < key.length() && i < 5; i++) {
         QJsonObject jsonObj;
         jsonObj["title"] = fms[key[i]]["title"];
         jsonObj["subtitle"] = fms[key[i]]["previewStr"];
@@ -95,7 +114,7 @@ void CarouselLoader::SlotRecvPosts(QStringList &key, QMap<QString, FrontMatterMg
         }
         else {
             jsonObj["imgUrl"] = "qrc:/res/cover/default.jpg";
-            jsonObj["mainColor"] = GetMainColor(":/res/cover/default.jpg");
+            jsonObj["mainColor"] = "#d2bab5";
             _imgList.append(jsonObj);
             continue;
         }
@@ -114,6 +133,6 @@ void CarouselLoader::SlotDownloadedImg(QJsonObject jsonObj, QByteArray bytes)
 
 void CarouselLoader::SlotDownloadFailedImg(QJsonObject jsonObj)
 {
-    jsonObj["mainColor"] = GetMainColor(":/res/cover/default.jpg");
+    jsonObj["mainColor"] = "#d2bab5";
     _imgList.append(jsonObj);
 }

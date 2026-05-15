@@ -98,6 +98,22 @@ BMWindow {
         }
     }
 
+    BMMessageBox{
+        id: msgBox
+    }
+
+    BMYmlSaveBtn {
+        anchors {
+            bottom: parent.bottom
+            right: parent.right
+            bottomMargin: Config.windowDistance + 10
+            rightMargin: Config.windowDistance + 10
+        }
+
+        visible: pageLoader.sourceComponent === home
+        msgBoxId: msgBox
+    }
+
     Component.onCompleted: {
         console.log("screen size: ", Screen.width, Screen.height)
         console.log("desktop screen size: ", Screen.desktopAvailableWidth, Screen.desktopAvailableHeight)

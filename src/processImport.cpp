@@ -10,10 +10,10 @@
 #include <QDate>
 
 ProcessImport::ProcessImport(BlogMgr* blogMgr, ProcessUpload* pUpload,
-                             YmlConfig* ymlCfg, YmlTreeModel* themeModel,
-                             QObject* obj/* = nullptr*/)
+                             YmlConfig* ymlCfg, QObject* obj/* = nullptr*/)
     : QObject(obj)
-    , _themeModel(themeModel)
+    , _configYml("")
+    , _themeConfigYml("")
 {
     connect(
         this,
@@ -102,7 +102,6 @@ bool ProcessImport::setFolderPath(QString path)
 void ProcessImport::setThemeConfigYml(QString path)
 {
     _themeConfigYml = path.mid(8);
-    _themeModel->init(_themeConfigYml);
 }
 
 bool ProcessImport::isYmlFile(const QString &path)

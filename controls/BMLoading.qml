@@ -14,6 +14,7 @@ BusyIndicator {
         right: parent.right
         bottom: parent.bottom
     }
+    visible: running
     property int fontPixel: 20
     property int btnFontPixel: 16
     property bool showClose: false
@@ -40,6 +41,14 @@ BusyIndicator {
                     width: loadingBg.width * 0.8
                     height: 5
                     clip: true
+
+                    Rectangle {
+                        id: loadingRecBg
+                        width: parent.width
+                        height: parent.height
+                        radius: height
+                        color: "#D3D3D3"
+                    }
 
                     Rectangle {
                         id: loadingRec

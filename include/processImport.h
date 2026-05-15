@@ -6,14 +6,12 @@
 #include "include/blogMgr.h"
 #include "include/processUpload.h"
 #include "include/ymlConfig.h"
-#include "include/ymlTreeModel.h"
 
 class ProcessImport: public QObject {
     Q_OBJECT
 public:
     explicit ProcessImport(BlogMgr* blogMgr, ProcessUpload* pUpload,
-                           YmlConfig* ymlCfg, YmlTreeModel* themeModel,
-                           QObject* obj = nullptr);
+                           YmlConfig* ymlCfg, QObject* obj = nullptr);
     ~ProcessImport() = default;
 
     Q_INVOKABLE bool setFolderPath(QString path);
@@ -39,7 +37,6 @@ private:
     QString _configYml;
     QString _themeConfigYml;
     QString _postPath;
-    YmlTreeModel* _themeModel;
     bool isLoad;
 
 signals:

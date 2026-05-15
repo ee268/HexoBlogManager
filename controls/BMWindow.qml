@@ -47,17 +47,34 @@ Window {
             height: Config.titleBarHeight
             color: "transparent"
 
-            BMText {
+            Row {
                 anchors {
                     verticalCenter: parent.verticalCenter
                     horizontalCenter: parent.horizontalCenter
                 }
+                spacing: 5
 
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-                text: window.title
-                font.pixelSize: 14
+                Image {
+                    anchors {
+                        verticalCenter: parent.verticalCenter
+                    }
+                    height: 18
+                    width: height
+                    source: "qrc:/res/blogMgrIcon.png"
+                    fillMode: Image.PreserveAspectCrop
+                }
+
+                BMText {
+                    anchors {
+                        verticalCenter: parent.verticalCenter
+                    }
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                    text: window.title
+                    font.pixelSize: 14
+                }
             }
+
 
             Row {
                 id: btnRow
