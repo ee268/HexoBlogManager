@@ -218,9 +218,9 @@ void ProcessImport::loadHistory()
     QString path = QCoreApplication::applicationDirPath() + "/history.json";
     QFile r(path);
     if (!r.open(QIODevice::ReadOnly)) {
-        qDebug() << "ReadOnly: load to history.json occur error" << path;
+        // qDebug() << "ReadOnly: load to history.json occur error" << path;
         r.close();
-        return;
+        r.open(QIODevice::ReadWrite | QIODevice::Text);
     }
 
     QByteArray all = r.readAll();

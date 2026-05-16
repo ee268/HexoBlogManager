@@ -163,9 +163,9 @@ void GlobalMgr::readSettings()
     QString path = QCoreApplication::applicationDirPath() + "/settings.json";
     QFile f(path);
     if (!f.open(QIODevice::ReadOnly)) {
-        qDebug() << "readSettings settings.json open failed" << path;
+        // qDebug() << "readSettings settings.json open failed" << path;
         f.close();
-        return;
+        f.open(QIODevice::ReadWrite | QIODevice::Text);
     }
 
     QByteArray all = f.readAll();

@@ -118,6 +118,7 @@ BMRectangle {
                         onAccepted: {
                             console.log(currentFile)
                             globalMgr.setValue("themeConfigYml", currentFile.toString())
+                            processImport.setThemeConfigYml(currentFile.toString())
                             textInput.text = currentFile.toString().slice(8)
                         }
                     }
