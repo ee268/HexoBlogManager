@@ -11,6 +11,7 @@ qt_standard_project_setup(REQUIRES 6.5)
 
 qt_add_executable(appBlogManager
     main.cpp
+    icon.rc
     include/carouselloader.h
     src/carouselloader.cpp
     include/systemThemeHelper.h

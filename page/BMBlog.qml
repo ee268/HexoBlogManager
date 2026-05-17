@@ -56,6 +56,7 @@ BMRectangle {
             bottom: parent.bottom
             horizontalCenter: parent.horizontalCenter
         }
+        visible: processImport.readHistory().length > 0
 
         ListView {
             id: listView
@@ -258,6 +259,13 @@ BMRectangle {
             loading.running = false
             loading.visible = false
         }
+    }
+
+    BMText {
+        anchors.centerIn: parent
+        visible: !listItem.visible
+        text: qsTr("请先导入配置")
+        font.pixelSize: 30
     }
 
     Component.onCompleted: {

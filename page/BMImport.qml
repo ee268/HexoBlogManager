@@ -34,6 +34,9 @@ Item {
         loadPath += processImport.getPostPath() + "\n"
         console.log("loadPath:", loadPath)
         msgBox.setMsgBox(true, "Success", "导入成功")
+
+        let json = processImport.readHistory();
+        history.insert(0, json[0])
     }
 
     FolderDialog {

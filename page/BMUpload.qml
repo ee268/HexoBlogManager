@@ -16,6 +16,7 @@ Item {
 
     BMMessageBox {
         id: msgBox
+        z: 9
     }
 
     Behavior on opacity {
@@ -28,6 +29,7 @@ Item {
         id: topRec
         width: parent.width
         height: parent.height * 0.4
+        visible: processImport.readHistory().length > 0
 
         ListModel {
             id: cmdList
@@ -160,6 +162,8 @@ Item {
 
     BMRectangle {
         id: bottomRec
+        visible: topRec.visible
+
         anchors {
             top: topRec.bottom
             topMargin: Config.windowDistance
@@ -202,6 +206,13 @@ Item {
                 }
             }
         }
+    }
+
+    BMText {
+        anchors.centerIn: parent
+        visible: !bottomRec.visible
+        text: qsTr("请先导入配置")
+        font.pixelSize: 30
     }
 
     Component.onCompleted: {

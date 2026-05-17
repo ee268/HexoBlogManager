@@ -17,6 +17,7 @@ ScrollView {
     Column {
         id: contentCol
         spacing: Config.windowDistance
+        visible: processImport.readHistory().length > 0
 
         BMCarousel {
             id: carousel
@@ -58,22 +59,14 @@ ScrollView {
                     globalMgr.setThemeYmlContent(text)
                 }
             }
-
-            // BMYmlTreeView {
-            //     width: root.width / 2
-            //     height: root.height * 0.8
-            //     model: ymlModel
-            // }
-            // BMYmlTreeView {
-            //     width: root.width / 2 - parent.spacing
-            //     height: root.height * 0.8
-            //     Component.onCompleted: {
-            //         if (globalMgr.contains("themeConfigYml")) {
-            //             processImport.setThemeConfigYml(globalMgr.getValue("themeConfigYml"))
-            //         }
-            //     }
-            // }
         }
+    }
+
+    BMText {
+        anchors.centerIn: parent
+        visible: !contentCol.visible
+        text: qsTr("请先导入配置")
+        font.pixelSize: 30
     }
 
     Behavior on opacity {

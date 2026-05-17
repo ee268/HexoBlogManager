@@ -18,7 +18,6 @@ int main(int argc, char *argv[])
     QtWebEngineQuick::initialize();
 
     QGuiApplication app(argc, argv);
-    app.setWindowIcon(QIcon(":/res/blogMgrIcon.png"));
 
     //支持自定义控件样式
     QQuickStyle::setStyle("Basic");
