@@ -17,7 +17,6 @@ ScrollView {
     Column {
         id: contentCol
         spacing: Config.windowDistance
-        visible: processImport.readHistory().length > 0
 
         BMCarousel {
             id: carousel
@@ -31,11 +30,27 @@ ScrollView {
             BMContributionMap {
                 id: contriMap
                 width: root.width * 0.6
+                visible: processImport.readHistory().length > 0
+
+                BMText {
+                    anchors.centerIn: parent
+                    visible: !contriMap.visible
+                    text: qsTr("请先导入配置")
+                    font.pixelSize: 30
+                }
             }
 
             BMAvatarCard {
                 height: contriMap.height
                 width: root.width * 0.4 - Config.windowDistance
+                visible: processImport.readHistory().length > 0
+
+                BMText {
+                    anchors.centerIn: parent
+                    visible: !contriMap.visible
+                    text: qsTr("请先导入配置")
+                    font.pixelSize: 30
+                }
             }
         }
 
@@ -60,13 +75,6 @@ ScrollView {
                 }
             }
         }
-    }
-
-    BMText {
-        anchors.centerIn: parent
-        visible: !contentCol.visible
-        text: qsTr("请先导入配置")
-        font.pixelSize: 30
     }
 
     Behavior on opacity {
