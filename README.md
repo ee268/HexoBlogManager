@@ -44,7 +44,7 @@
 
 > **设置**
 
-![settings](C:\Users\李海冬\AppData\Roaming\Typora\typora-user-images\image-20260518153910531.png)
+![settings](https://asserts.645429.xyz/PicGo/1779091211)
 
 > **关于**
 
