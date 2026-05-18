@@ -14,6 +14,8 @@ ScrollView {
         anchors.right: root.right
     }
 
+    property bool isVisible: processImport.readHistory().length > 0
+
     Column {
         id: contentCol
         spacing: Config.windowDistance
@@ -22,6 +24,7 @@ ScrollView {
             id: carousel
             width: root.width
             height: root.height * 0.4
+            visible: isVisible
         }
 
         Row {
@@ -30,27 +33,13 @@ ScrollView {
             BMContributionMap {
                 id: contriMap
                 width: root.width * 0.6
-                visible: processImport.readHistory().length > 0
-
-                BMText {
-                    anchors.centerIn: parent
-                    visible: !contriMap.visible
-                    text: qsTr("请先导入配置")
-                    font.pixelSize: 30
-                }
+                visible: isVisible
             }
 
             BMAvatarCard {
                 height: contriMap.height
                 width: root.width * 0.4 - Config.windowDistance
-                visible: processImport.readHistory().length > 0
-
-                BMText {
-                    anchors.centerIn: parent
-                    visible: !contriMap.visible
-                    text: qsTr("请先导入配置")
-                    font.pixelSize: 30
-                }
+                visible: isVisible
             }
         }
 

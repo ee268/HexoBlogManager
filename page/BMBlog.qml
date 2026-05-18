@@ -10,15 +10,6 @@ BMRectangle {
     opacity: 0
     visible: false
 
-    signal finishedShowMdEdit()
-
-    BMLoading {
-        id: loading
-        running: false
-        z: 99
-        visible: false
-    }
-
     Behavior on opacity {
         NumberAnimation {
             duration: Config.aniDuration
@@ -229,35 +220,23 @@ BMRectangle {
                         Config.openPostIdx = index
                         const component = Qt.createComponent("qrc:/qml/controls/BMMdEdit.qml");
                         const incubator = component.incubateObject(null, { title: name });
-                        loading.running = true
-                        loading.visible = true
 
                         if (incubator.status !== Component.Ready) {
                             incubator.onStatusChanged = function(status) {
                                 if (status === Component.Ready) {
                                     incubator.object.show();
-                                    finishedShowMdEdit()
                                 } else if (status === Component.Error) {
                                     console.log("open BMMdEdit failed:", component.errorString());
                                 }
                             };
                         } else {
                             incubator.object.show();
-                            finishedShowMdEdit()
                         }
 
                         return
                     }
                 }
             }
-        }
-    }
-
-    Connections {
-        target: root
-        function onFinishedShowMdEdit() {
-            loading.running = false
-            loading.visible = false
         }
     }
 
